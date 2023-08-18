@@ -1,0 +1,27 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+.container {
+    margin: auto;
+    width: 75%;
+}
+.playground {
+    width: 300px;
+    height: 300px;
+    margin: 10px auto;
+    background-color: #ffd3ee;
+    text-align: center;
+}
+.flexbox {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.playground .cell {
+    background-color: blue;
+    width: calc((100% / 3) - 44px); /* Calculate width based on available space */
+    padding: 40px 20px;
+    margin: 2px;
+    color:#f1f1f1;
+}
