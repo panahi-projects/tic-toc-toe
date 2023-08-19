@@ -1,17 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 * {
     margin: 0;
     padding: 0;
+}
+body {
+    background-color: #22113f;
 }
 .container {
     margin: auto;
     width: 75%;
 }
+.title {
+    text-align: center;
+    font-family: 'Varela Round', sans-serif;
+    text-transform: uppercase;
+    font-size: 48px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 10px #03bcf4, 0 0 20px #03bcf4, 0 0 40px #03bcf4, 0 0 80px #03bcf4, 0 0 160px #03bcf4;
+    margin: 16px;
+}
 .playground {
     width: 300px;
     height: 300px;
     margin: 10px auto;
-    background-color: #ffd3ee;
+    background: rgb(95, 15, 191);
+    background: linear-gradient(120deg, rgba(95, 15, 191, 1) 0%, rgba(170, 20, 111, 1) 100%);
     text-align: center;
+    padding: 12px;
+    border-radius: 8px;
 }
 .flexbox {
     display: flex;
@@ -19,9 +37,34 @@
     justify-content: center;
 }
 .playground .cell {
-    background-color: blue;
-    width: calc((100% / 3) - 44px); /* Calculate width based on available space */
+    position: relative;
+    width: calc((100% / 3) - 46px); /* Calculate width based on available space */
     padding: 40px 20px;
     margin: 2px;
-    color:#f1f1f1;
+    color: #f1f1f1;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.55);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.playground .cell span {
+    position: absolute;
+    font-family: 'Varela Round', sans-serif;
+    text-transform: uppercase;
+    font-size: 92px;
+    font-weight: 600;
+    top: calc(50% + 2px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.playground .cell span.cell-x {
+    color: #fff !important;
+    text-shadow: 0 0 10px #03bcf4, 0 0 20px #03bcf4 !important;
+}
+.playground .cell span.cell-o {
+    color: #fff;
+    text-shadow: 0 0 10px #f403a8, 0 0 20px #f403a8, 0 0 30px #da0095;
+}
+.playground .cell:hover {
+    background: rgba(0, 0, 0, 0.65);
 }
