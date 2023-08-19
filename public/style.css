@@ -22,6 +22,7 @@ body {
     margin: 16px;
 }
 .playground {
+    position: relative;
     width: 300px;
     height: 300px;
     margin: 10px auto;
@@ -30,6 +31,7 @@ body {
     text-align: center;
     padding: 12px;
     border-radius: 8px;
+    overflow: hidden;
 }
 .flexbox {
     display: flex;
@@ -58,8 +60,8 @@ body {
     transform: translate(-50%, -50%);
 }
 .playground .cell span.cell-x {
-    color: #fff !important;
-    text-shadow: 0 0 10px #03bcf4, 0 0 20px #03bcf4 !important;
+    color: #fff;
+    text-shadow: 0 0 10px #03bcf4, 0 0 20px #03bcf4;
 }
 .playground .cell span.cell-o {
     color: #fff;
@@ -67,4 +69,52 @@ body {
 }
 .playground .cell:hover {
     background: rgba(0, 0, 0, 0.65);
+}
+.clearfix {
+    overflow: auto;
+}
+.clearfix::after {
+    content: '';
+    display: table;
+    clear: both;
+}
+.actions {
+    padding: 2px 32px;
+    width: 300px;
+    margin: auto;
+}
+.btn {
+    float: right;
+    border: none;
+    background: none;
+    box-shadow: none;
+    outline: none;
+    letter-spacing: 2px;
+    font-family: 'Varela Round', sans-serif;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-glow {
+    color: #fff;
+    text-shadow: 0 0 4px #03bcf4, 0 0 30px #03bcf4;
+    padding: 4px 8px;
+}
+.btn-glow:hover {
+    text-shadow: 0 0 50px #03bcf4, 0 0 10px #03bcf4, 0 0 30px #03bcf4;
+}
+.winner-prompt{
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    color: #74ffa9;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 48px;
+    z-index: 999;
+    top:10px;
+    bottom: 10px;
+    left:10px;
+    right: 10px;
+    height: calc(100% - 20px);
+    text-align: center;
+    line-height: 6;
+    border-radius: 8px;
 }
