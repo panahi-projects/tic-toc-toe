@@ -1,22 +1,27 @@
 'use strict';
 
+interface IMove {
+    turn: string;
+    cell: number;
+}
+
 (function () {
-    let currentTurn = 'x',
-        isGameOver = false;
-    let moves = [];
+    let currentTurn: string = 'x',
+        isGameOver: boolean = false;
+    let moves: IMove[] = [];
     const NUMBER_OF_GAME_PIECES = 9;
 
     const Playground_Init = (gamePiecesNum = 0) => {
-        const playground = document.querySelector('#playground');
+        const playground = document.querySelector('#playground') as HTMLElement;
 
         for (let i = 1; i <= gamePiecesNum; i++) {
-            const section = document.createElement('section');
+            const section: HTMLElement = document.createElement('section');
             section.className = 'cell';
             section.innerHTML = '';
-            section.dataset.number = i;
+            section.dataset.number = `${i}`;
             section.onclick = () => {
                 if (isGameOver) return;
-                const selected_piece = +section.getAttribute('data-number');
+                const selected_piece = parseInt(section.getAttribute('data-number') || '0');
 
                 let moveStatus = makeMove(selected_piece);
                 if (moveStatus?.cell) {
@@ -30,55 +35,55 @@
                     makeWinnigPrompt();
                 }
             };
-            playground.appendChild(section);
+            playground?.appendChild(section);
         }
     };
     const makeWinnigPrompt = () => {
-        const playground = document.querySelector('#playground');
+        const playground = document.querySelector('#playground') as HTMLElement;
 
         const winningPrompt = document.createElement('div');
         winningPrompt.className = 'winner-prompt';
         winningPrompt.innerHTML = 'You Win! 🎉';
-        playground.appendChild(winningPrompt);
+        playground?.appendChild(winningPrompt);
     };
     const resetButtonHandler = () => {
         if (moves.length === 0) return;
-        const playground = document.querySelector('#playground');
-        while (playground.firstChild) {
-            playground.removeChild(playground.lastChild);
+        const playground = document.querySelector('#playground') as HTMLElement;
+        while (playground?.firstChild) {
+            playground?.removeChild(playground.lastChild as HTMLElement);
         }
-        const actions = document.querySelector('.actions');
-        actions.removeChild(actions.lastChild);
+        const actions: HTMLElement = document.querySelector('.actions') as HTMLElement;
+        actions?.removeChild(actions.lastChild as HTMLElement);
         moves = [];
         isGameOver = false;
         currentTurn = 'x';
 
         Playground_Init(NUMBER_OF_GAME_PIECES);
     };
-    const makeMove = (cellNumber) => {
+    const makeMove = (cellNumber: number): IMove => {
         if (moves.findIndex((x) => x.cell === cellNumber) >= 0) {
-            return {};
+            return {} as IMove;
         }
         const cellContent = document.createElement('span');
         if (currentTurn === 'x') {
             cellContent.className = 'cell-x';
             cellContent.innerHTML = 'X';
-            let xCell = document.querySelector(`section.cell:nth-child(${cellNumber})`);
+            let xCell: HTMLElement = document.querySelector(`section.cell:nth-child(${cellNumber})`) as HTMLElement;
             xCell.appendChild(cellContent);
 
             currentTurn = 'o';
-            return { turn: 'x', cell: cellNumber };
+            return { turn: 'x', cell: cellNumber } as IMove;
         } else {
             cellContent.className = 'cell-o';
             cellContent.innerHTML = 'O';
-            let xCell = document.querySelector(`section.cell:nth-child(${cellNumber})`);
+            let xCell: HTMLElement = document.querySelector(`section.cell:nth-child(${cellNumber})`) as HTMLElement;
             xCell.appendChild(cellContent);
 
             currentTurn = 'x';
-            return { turn: 'o', cell: cellNumber };
+            return { turn: 'o', cell: cellNumber } as IMove;
         }
     };
-    const extractMoves = (collection = [], turn = '') => {
+    const extractMoves = (collection: IMove[] = [], turn = '') => {
         return collection
             .map((x) => {
                 if (x.turn === turn) {
@@ -88,7 +93,7 @@
             .filter((x) => x);
     };
     const makeResetButton = () => {
-        const actionsDiv = document.querySelector('.actions');
+        const actionsDiv: HTMLElement = document.querySelector('.actions') as HTMLElement;
         if (actionsDiv.querySelector('button')) return;
 
         const resetButton = document.createElement('button');

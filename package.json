@@ -5,7 +5,11 @@
     "main": "server.js",
     "scripts": {
         "start": "node server.js",
-        "dev": "nodemon server.js",
+        "dev": "concurrently npm:watch:*",
+        "watch:1": "tsc -w",
+        "watch:2": "tsc server.ts",
+        "watch:3": "nodemon server.js",
+        "build-dist": "./node_modules/typescript/bin/tsc",
         "test": "exit 0"
     },
     "keywords": [
@@ -25,8 +29,11 @@
         "http-errors": "^2.0.0"
     },
     "devDependencies": {
+        "@types/node": "^20.5.1",
+        "concurrently": "^8.2.0",
         "connect-livereload": "^0.6.1",
         "livereload": "^0.9.3",
-        "nodemon": "^3.0.1"
+        "nodemon": "^3.0.1",
+        "typescript": "^5.1.6"
     }
 }
