@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
-
 * {
     margin: 0;
     padding: 0;
@@ -23,8 +22,8 @@ body {
 }
 .playground {
     position: relative;
-    width: 300px;
-    height: 300px;
+    /* width: 300px;
+    height: 300px; */
     margin: 10px auto;
     background: rgb(95, 15, 191);
     background: linear-gradient(120deg, rgba(95, 15, 191, 1) 0%, rgba(170, 20, 111, 1) 100%);
@@ -40,7 +39,7 @@ body {
 }
 .playground .cell {
     position: relative;
-    width: calc((100% / 3) - 46px); /* Calculate width based on available space */
+    width: calc((100% / var(--dimension)) - 46px); /* Calculate width based on available space */
     padding: 40px 20px;
     margin: 2px;
     color: #f1f1f1;
@@ -102,16 +101,16 @@ body {
 .btn-glow:hover {
     text-shadow: 0 0 50px #03bcf4, 0 0 10px #03bcf4, 0 0 30px #03bcf4;
 }
-.winner-prompt{
+.winner-prompt {
     position: absolute;
     background: rgba(0, 0, 0, 0.85);
     color: #74ffa9;
     font-family: 'Varela Round', sans-serif;
     font-size: 48px;
     z-index: 999;
-    top:10px;
+    top: 10px;
     bottom: 10px;
-    left:10px;
+    left: 10px;
     right: 10px;
     height: calc(100% - 20px);
     text-align: center;

@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "target": "esnext",
-        "module": "commonjs",
+        // "module": "commonjs",
         "allowJs": true,
         "checkJs": true,
         "outDir": "build",
@@ -11,11 +11,11 @@
         "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
         "declaration": true /* Generates corresponding '.d.ts' file. */,
         "strictNullChecks": true,
-        "resolveJsonModule": true,
+        // "resolveJsonModule": true,
         "sourceMap": true,
         "baseUrl": ".",
         "paths": {
-            "@/*": ["src/*"]
+            "./*": ["src/*"]
         }
     },
     "exclude": ["node_modules", "dist"],
