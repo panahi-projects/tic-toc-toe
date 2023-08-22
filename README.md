@@ -16,9 +16,10 @@ I hope you have fun playing Tic Tac Toe! Let me know if you encounter any issues
 
 1. Clone the repository: git clone https://github.com/panahi-projects/tic-toc-toe.git
 2. Navigate to the project directory: `cd tic-toc-toe`
-3. Install the packages: `npm install`
-4. Run the application: `npm run dev` or `npm start`
-5. Open your browser and navigate to http://localhost:3000 to see the application in action.
+3. [[Temporary]]: type the command `git checkout 149de7d9402d002b305b00adb2ae6e40ca9974e2` (commit: `first release: added scripts`) to checkout to the stable commit (It is because the app is under development phase)
+4. Install the packages: `npm install`
+5. Run the application: `npm run dev` or `npm start`
+6. Open your browser and navigate to http://localhost:3000 to see the application in action.
 
 
 #### Node version
