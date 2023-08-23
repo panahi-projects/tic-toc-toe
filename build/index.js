@@ -1,40 +1,36 @@
 'use strict';
-import { CreateElement } from './utils/createElement.js';
 import { Playground } from './utils/playground.js';
 (function () {
-    let el = {
-        tag: 'button'
-    };
-    console.log(CreateElement(el));
     let currentTurn = 'x', isGameOver = false;
     let moves = [];
     const NUMBER_OF_GAME_PIECES = 9;
-    // const Playground_Init = (gamePiecesNum = 0) => {
-    //     // CreateElement();
-    //     const playground = document.querySelector('#playground') as HTMLElement;
-    //     for (let i = 1; i <= gamePiecesNum; i++) {
-    //         const section: HTMLElement = document.createElement('section');
-    //         section.className = 'cell';
-    //         section.innerHTML = '';
-    //         section.dataset.number = `${i}`;
-    //         section.onclick = () => {
-    //             if (isGameOver) return;
-    //             const selected_piece = parseInt(section.getAttribute('data-number') || '0');
-    //             let moveStatus = makeMove(selected_piece);
-    //             if (moveStatus?.cell) {
-    //                 moves.push(moveStatus);
-    //             }
-    //             if (moves.length) {
-    //                 makeResetButton();
-    //             }
-    //             isGameOver = gameOver();
-    //             if (isGameOver) {
-    //                 makeWinnigPrompt();
-    //             }
-    //         };
-    //         playground?.appendChild(section);
-    //     }
-    // };
+    const Playground_Init = (gamePiecesNum = 0) => {
+        // CreateElement();
+        const playground = document.querySelector('#playground');
+        for (let i = 1; i <= gamePiecesNum; i++) {
+            const section = document.createElement('section');
+            section.className = 'cell';
+            section.innerHTML = '';
+            section.dataset.number = `${i}`;
+            section.onclick = () => {
+                if (isGameOver)
+                    return;
+                const selected_piece = parseInt(section.getAttribute('data-number') || '0');
+                let moveStatus = makeMove(selected_piece);
+                if (moveStatus?.cell) {
+                    moves.push(moveStatus);
+                }
+                if (moves.length) {
+                    makeResetButton();
+                }
+                isGameOver = gameOver();
+                if (isGameOver) {
+                    makeWinnigPrompt();
+                }
+            };
+            playground?.appendChild(section);
+        }
+    };
     const makeWinnigPrompt = () => {
         const playground = document.querySelector('#playground');
         const winningPrompt = document.createElement('div');
@@ -63,7 +59,7 @@ import { Playground } from './utils/playground.js';
         const cellContent = document.createElement('span');
         if (currentTurn === 'x') {
             cellContent.className = 'cell-x';
-            cellContent.innerHTML = 'X';
+            cellContent.innerHTML = 'x';
             let xCell = document.querySelector(`section.cell:nth-child(${cellNumber})`);
             xCell.appendChild(cellContent);
             currentTurn = 'o';
@@ -71,7 +67,7 @@ import { Playground } from './utils/playground.js';
         }
         else {
             cellContent.className = 'cell-o';
-            cellContent.innerHTML = 'O';
+            cellContent.innerHTML = 'o';
             let xCell = document.querySelector(`section.cell:nth-child(${cellNumber})`);
             xCell.appendChild(cellContent);
             currentTurn = 'x';

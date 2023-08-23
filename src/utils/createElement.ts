@@ -1,4 +1,4 @@
-export const CreateElement = (elementObj): HTMLElement => {
+export const CreateElement = (elementObj: any): HTMLElement => {
     if (!elementObj || !elementObj.tag) return {} as HTMLElement;
     var element: HTMLElement = document.createElement(elementObj.tag);
     for (var prop in elementObj) {

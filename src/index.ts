@@ -1,5 +1,4 @@
 'use strict';
-import { CreateElement } from './utils/createElement.js';
 import { Playground } from './utils/playground.js';
 
 interface IMove {
@@ -8,10 +7,6 @@ interface IMove {
 }
 
 (function () {
-    let el = {
-        tag: 'button'
-    };
-    console.log(CreateElement(el));
     let currentTurn: string = 'x',
         isGameOver: boolean = false;
     let moves: IMove[] = [];
@@ -74,7 +69,7 @@ interface IMove {
         const cellContent = document.createElement('span');
         if (currentTurn === 'x') {
             cellContent.className = 'cell-x';
-            cellContent.innerHTML = 'X';
+            cellContent.innerHTML = 'x';
             let xCell: HTMLElement = document.querySelector(`section.cell:nth-child(${cellNumber})`) as HTMLElement;
             xCell.appendChild(cellContent);
 
@@ -82,7 +77,7 @@ interface IMove {
             return { turn: 'x', cell: cellNumber } as IMove;
         } else {
             cellContent.className = 'cell-o';
-            cellContent.innerHTML = 'O';
+            cellContent.innerHTML = 'o';
             let xCell: HTMLElement = document.querySelector(`section.cell:nth-child(${cellNumber})`) as HTMLElement;
             xCell.appendChild(cellContent);
 
@@ -142,10 +137,11 @@ interface IMove {
         }
         return hasWon;
     };
-    console.log('Web server is running!');
+    console.log('Game is running!');
 
     // Playground_Init(NUMBER_OF_GAME_PIECES);
     // resetButton();
+
     const gameField: HTMLElement = document.querySelector('#gameField') as HTMLElement;
     let playground = Playground(4, gameField);
     playground.init();
