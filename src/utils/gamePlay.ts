@@ -12,7 +12,7 @@ export const makeMove = (cellNumber: number, currentTurn: TSymbol, player: IPlay
     let selectedSection: HTMLElement = document.querySelector(`section.cell:nth-child(${cellNumber})`) as HTMLElement;
     const cellContent = CreateElement(cellContentSchema);
     selectedSection.appendChild(cellContent);
-    debugger;
+
     let moves: IMove = MovesInstance.getMoves();
     let currentPlayerStats: IPlayerMove = moves[symbol];
 

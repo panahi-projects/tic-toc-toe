@@ -10,7 +10,6 @@ export const makeMove = (cellNumber, currentTurn, player) => {
     let selectedSection = document.querySelector(`section.cell:nth-child(${cellNumber})`);
     const cellContent = CreateElement(cellContentSchema);
     selectedSection.appendChild(cellContent);
-    debugger;
     let moves = MovesInstance.getMoves();
     let currentPlayerStats = moves[symbol];
     if (currentPlayerStats?.selectedCells) {

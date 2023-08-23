@@ -8,3 +8,14 @@ export const generateID = (length: number): string => {
 
     return result;
 };
+export const groupBy = (obj, iteratee): { [key: number]: number[] } => {
+    const result = {};
+    for (const key in obj) {
+        const grouping = iteratee(obj[key], key, obj);
+        if (!result[grouping]) {
+            result[grouping] = [];
+        }
+        result[grouping].push(+key);
+    }
+    return result;
+};

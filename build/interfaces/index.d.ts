@@ -28,3 +28,6 @@ export interface IMove {
     x: IPlayerMove;
     o: IPlayerMove;
 }
+export interface IMatrix {
+    [key: number]: number[];
+}

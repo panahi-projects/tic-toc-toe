@@ -4,6 +4,7 @@ import GameStats from '../store/gameStats.js';
 import { generateID } from './global.js';
 import { makeMove } from './gamePlay.js';
 import MovesInstance from '../store/moveStats.js';
+import { Scoring } from '../utils/index.js';
 
 export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
     let rootCSS = document.querySelector(':root') as HTMLElement;
@@ -55,39 +56,27 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         const playground = CreateElement(playgroundSchema);
         return parentTag.appendChild(playground);
     };
-    /**
-     *
-     * @param cellNumber type: number
-     * @returns The row number of the given cell by index + 1
-     */
-    const rowNumber = (cellNumber: number): number => {
-        let rowNum = -1;
-        if (typeof cellNumber !== 'number' || cellNumber <= 0) return rowNum;
-        if (cellNumber % squareDimension > 0) rowNum = cellNumber / squareDimension + 1;
-        else rowNum = cellNumber / squareDimension;
-
-        return Math.floor(rowNum);
-    };
-
-    const colNumber = (cellNumber: number = -1): number => {
-        return cellNumber % squareDimension === 0 ? squareDimension : Math.floor(cellNumber % squareDimension);
-    };
-
     const handleClick = (event) => {
         if (!event?.target?.id) throw new Error('Element Id is not recognized!');
-        debugger;
         const id = +event.target.id;
-        // let row = rowNumber(id);
-        // let col = colNumber(id);
-        // console.log('You clicked on item:', id);
-        // console.log(`(${row}, ${col})`);
 
         let currentTurn: TSymbol = MovesInstance.getCurrentTurn();
         let lastGameStats = GameStats.getLastStats();
         let currentPlayer =
             lastGameStats?.player1?.symbol === currentTurn ? lastGameStats?.player1 : lastGameStats?.player2;
         let moves: IMove = makeMove(id, currentTurn, currentPlayer);
-        console.log('moves:', moves);
+        // console.log('moves:', moves);
+
+        const scoring = Scoring(squareDimension, moves);
+        let xH = scoring.horizontalScoring('x');
+        let oH = scoring.horizontalScoring('o');
+        console.log('xH', xH);
+        console.log('oH', oH);
+
+        let xV = scoring.verticalScoring('x');
+        let oV = scoring.verticalScoring('o');
+        console.log('xV', xV);
+        console.log('oV', oV);
 
         MovesInstance.updateTurn(currentTurn === 'x' ? 'o' : 'x');
         const playerMove: IPlayerMove = {

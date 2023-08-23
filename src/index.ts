@@ -143,6 +143,6 @@ interface IMove {
     // resetButton();
 
     const gameField: HTMLElement = document.querySelector('#gameField') as HTMLElement;
-    let playground = Playground(4, gameField);
+    let playground = Playground(6, gameField);
     playground.init();
 })();

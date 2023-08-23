@@ -4,33 +4,32 @@ import { Playground } from './utils/playground.js';
     let currentTurn = 'x', isGameOver = false;
     let moves = [];
     const NUMBER_OF_GAME_PIECES = 9;
-    const Playground_Init = (gamePiecesNum = 0) => {
-        // CreateElement();
-        const playground = document.querySelector('#playground');
-        for (let i = 1; i <= gamePiecesNum; i++) {
-            const section = document.createElement('section');
-            section.className = 'cell';
-            section.innerHTML = '';
-            section.dataset.number = `${i}`;
-            section.onclick = () => {
-                if (isGameOver)
-                    return;
-                const selected_piece = parseInt(section.getAttribute('data-number') || '0');
-                let moveStatus = makeMove(selected_piece);
-                if (moveStatus?.cell) {
-                    moves.push(moveStatus);
-                }
-                if (moves.length) {
-                    makeResetButton();
-                }
-                isGameOver = gameOver();
-                if (isGameOver) {
-                    makeWinnigPrompt();
-                }
-            };
-            playground?.appendChild(section);
-        }
-    };
+    // const Playground_Init = (gamePiecesNum = 0) => {
+    //     // CreateElement();
+    //     const playground = document.querySelector('#playground') as HTMLElement;
+    //     for (let i = 1; i <= gamePiecesNum; i++) {
+    //         const section: HTMLElement = document.createElement('section');
+    //         section.className = 'cell';
+    //         section.innerHTML = '';
+    //         section.dataset.number = `${i}`;
+    //         section.onclick = () => {
+    //             if (isGameOver) return;
+    //             const selected_piece = parseInt(section.getAttribute('data-number') || '0');
+    //             let moveStatus = makeMove(selected_piece);
+    //             if (moveStatus?.cell) {
+    //                 moves.push(moveStatus);
+    //             }
+    //             if (moves.length) {
+    //                 makeResetButton();
+    //             }
+    //             isGameOver = gameOver();
+    //             if (isGameOver) {
+    //                 makeWinnigPrompt();
+    //             }
+    //         };
+    //         playground?.appendChild(section);
+    //     }
+    // };
     const makeWinnigPrompt = () => {
         const playground = document.querySelector('#playground');
         const winningPrompt = document.createElement('div');
@@ -123,11 +122,11 @@ import { Playground } from './utils/playground.js';
         }
         return hasWon;
     };
-    console.log('Web server is running!');
+    console.log('Game is running!');
     // Playground_Init(NUMBER_OF_GAME_PIECES);
     // resetButton();
     const gameField = document.querySelector('#gameField');
-    let playground = Playground(4, gameField);
+    let playground = Playground(6, gameField);
     playground.init();
 })();
 //# sourceMappingURL=index.js.map
