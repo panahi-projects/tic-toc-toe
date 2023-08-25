@@ -3,6 +3,12 @@ import { IMove, IPlayer, IPlayerMove, TSymbol } from '../interfaces/index.js';
 import MovesInstance from '../store/moveStats.js';
 
 export const makeMove = (cellNumber: number, currentTurn: TSymbol, player: IPlayer): IMove => {
+    // next 4 lines are for preventing to add more than one item in each section
+    let moves: IMove = MovesInstance.getMoves();
+    if (moves.o.selectedCells.includes(cellNumber) || moves.x.selectedCells.includes(cellNumber)) {
+        return {} as IMove;
+    }
+
     const symbol = player.symbol.toLowerCase();
     const cellContentSchema = {
         tag: 'span',
@@ -13,7 +19,6 @@ export const makeMove = (cellNumber: number, currentTurn: TSymbol, player: IPlay
     const cellContent = CreateElement(cellContentSchema);
     selectedSection.appendChild(cellContent);
 
-    let moves: IMove = MovesInstance.getMoves();
     let currentPlayerStats: IPlayerMove = moves[symbol];
 
     if (currentPlayerStats?.selectedCells) {

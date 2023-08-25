@@ -126,7 +126,7 @@ import { Playground } from './utils/playground.js';
     // Playground_Init(NUMBER_OF_GAME_PIECES);
     // resetButton();
     const gameField = document.querySelector('#gameField');
-    let playground = Playground(6, gameField);
+    let playground = Playground(5, gameField);
     playground.init();
 })();
 //# sourceMappingURL=index.js.map

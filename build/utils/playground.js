@@ -65,12 +65,16 @@ export const Playground = (squareDimension, parentTag) => {
         const scoring = Scoring(squareDimension, moves);
         let xH = scoring.horizontalScoring('x');
         let oH = scoring.horizontalScoring('o');
-        console.log('xH', xH);
-        console.log('oH', oH);
         let xV = scoring.verticalScoring('x');
         let oV = scoring.verticalScoring('o');
-        console.log('xV', xV);
-        console.log('oV', oV);
+        let rightDiagonalX = scoring.rightDiagonalScoring('x');
+        let rightDiagonalO = scoring.rightDiagonalScoring('o');
+        let leftDiagonalX = scoring.leftDiagonalScoring('x');
+        let leftDiagonalO = scoring.leftDiagonalScoring('o');
+        let totalX = xH + xV + rightDiagonalX + leftDiagonalX;
+        let totalO = oH + oV + rightDiagonalO + leftDiagonalO;
+        console.log('totalX: ', totalX);
+        console.log('totalO: ', totalO);
         MovesInstance.updateTurn(currentTurn === 'x' ? 'o' : 'x');
         const playerMove = {
             selectedCells: [],
