@@ -5,6 +5,7 @@
 }
 body {
     background-color: #22113f;
+    font-family: 'Varela Round', sans-serif;
 }
 .container {
     margin: auto;
@@ -12,7 +13,6 @@ body {
 }
 .title {
     text-align: center;
-    font-family: 'Varela Round', sans-serif;
     text-transform: uppercase;
     font-size: 48px;
     font-weight: 800;
@@ -22,9 +22,9 @@ body {
 }
 .playground {
     position: relative;
-    /* width: 300px;
-    height: 300px; */
-    margin: 10px auto;
+    width: calc(var(--dimension) * 100px);
+    height: calc(var(--dimension) * 100px);
+    margin: 10px auto 32px;
     background: rgb(95, 15, 191);
     background: linear-gradient(120deg, rgba(95, 15, 191, 1) 0%, rgba(170, 20, 111, 1) 100%);
     text-align: center;
@@ -50,7 +50,6 @@ body {
 }
 .playground .cell span {
     position: absolute;
-    font-family: 'Varela Round', sans-serif;
     text-transform: uppercase;
     font-size: 92px;
     font-weight: 600;
@@ -58,11 +57,11 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
 }
-.playground .cell span.cell-x {
+.cell-x {
     color: #fff;
     text-shadow: 0 0 10px #03bcf4, 0 0 20px #03bcf4;
 }
-.playground .cell span.cell-o {
+.cell-o {
     color: #fff;
     text-shadow: 0 0 10px #f403a8, 0 0 20px #f403a8, 0 0 30px #da0095;
 }
@@ -78,20 +77,23 @@ body {
     clear: both;
 }
 .actions {
+    position: relative;
     padding: 2px 32px;
-    width: 300px;
+    width: calc(var(--dimension) * 100px);
     margin: auto;
+    text-align: right;
 }
 .btn {
-    float: right;
+    /* position: absolute; */
     border: none;
     background: none;
     box-shadow: none;
     outline: none;
-    letter-spacing: 2px;
-    font-family: 'Varela Round', sans-serif;
+    /* letter-spacing: 2px; */
     cursor: pointer;
     transition: 0.3s;
+    /* position: absolute; */
+    transform: translateY(-20px);
 }
 .btn-glow {
     color: #fff;
@@ -105,7 +107,6 @@ body {
     position: absolute;
     background: rgba(0, 0, 0, 0.85);
     color: #74ffa9;
-    font-family: 'Varela Round', sans-serif;
     font-size: 48px;
     z-index: 999;
     top: 10px;
@@ -116,4 +117,49 @@ body {
     text-align: center;
     line-height: 6;
     border-radius: 8px;
+}
+.score-board {
+    position: absolute;
+    width: 25%;
+}
+.board-left {
+    left: 2.5%;
+}
+.board-right {
+    right: 2.5%;
+}
+.player-score {
+    width: 100%;
+    display: inline-block;
+    /* background-color: #74ffa9; */
+    text-align: center;
+}
+.player-title {
+    font-size: 2em;
+    color: #e7da99;
+    font-weight: 400;
+}
+.player-title span {
+    font-size: 42px;
+    font-weight: 600;
+    /* color: #f4cc03; */
+}
+.score {
+    font-size: 7.2em;
+    color: #f49003;
+    font-weight: 600;
+}
+.current-turn {
+    color: #4ff403;
+    font-size: 18px;
+    text-align: center;
+}
+@media only screen and (max-width: 1200px) {
+    .score-board {
+        top: 10px;
+        font-size: 40%;
+    }
+    .player-title span {
+        font-size: 22px;
+    }
 }

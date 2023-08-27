@@ -1,4 +1,4 @@
-import { IPlayer, IStat } from '../interfaces/index.js';
+import { IPlayer, IStat, TSymbol } from '../interfaces/index.js';
 
 let instance: any;
 const stats: IStat[] = [];
@@ -27,12 +27,13 @@ class GameStats {
     getLastStats(): IStat {
         return stats[stats.length - 1];
     }
-    addScore(playerNum: 1 | 2, addedValue: number) {
+    addScore(playerSymbol: TSymbol, newValue: number) {
         let lastStat: IStat = { ...this.getLastStats() };
-        if (playerNum === 1) {
-            lastStat.player1.score += addedValue;
-        } else if (playerNum === 2) {
-            lastStat.player2.score += addedValue;
+
+        if (lastStat.player1.symbol === playerSymbol) {
+            lastStat.player1.score = newValue;
+        } else {
+            lastStat.player2.score = newValue;
         }
         this.updateStats(lastStat);
     }

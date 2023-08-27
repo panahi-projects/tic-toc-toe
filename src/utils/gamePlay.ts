@@ -40,5 +40,18 @@ export const makeMove = (cellNumber: number, currentTurn: TSymbol, player: IPlay
         ...moves,
         [symbol]: playerMove
     };
+    getCurrentTurn();
     return updatedMove;
+};
+export const getCurrentTurn = () => {
+    let turn = MovesInstance.getCurrentTurn();
+    const currentTurnSpan = document.querySelector('#currentTurn') as HTMLElement;
+
+    if (!currentTurnSpan.innerHTML.length) {
+        currentTurnSpan.innerHTML = turn.toUpperCase();
+    } else {
+        currentTurnSpan.innerHTML = turn == 'x' ? 'O' : 'X';
+    }
+
+    return turn;
 };

@@ -1,4 +1,5 @@
-export const Scoring = (squareDimension, moves) => {
+import GameStats from '../store/gameStats.js';
+export const Scoring = (squareDimension, moves = { x: {}, o: {} }) => {
     let xMoves; //desc sorted x moves
     let oMoves; //desc sorted o moves
     let xMatrix = [];
@@ -31,6 +32,8 @@ export const Scoring = (squareDimension, moves) => {
     const getSelectedAreas = (playerMoves) => {
         let matrix = {};
         let rowNum, colNum;
+        if (!playerMoves?.length)
+            return {};
         for (const move of playerMoves) {
             rowNum = rowNumber(move);
             colNum = colNumber(move);
@@ -66,7 +69,7 @@ export const Scoring = (squareDimension, moves) => {
             let splittedCombination = strMatRow.split('0').filter((x) => x.length);
             for (const sc of splittedCombination) {
                 if (sc.length >= 3)
-                    scores += sc.length * 10;
+                    scores += sc.length * 100;
             }
         }
         return scores;
@@ -99,7 +102,7 @@ export const Scoring = (squareDimension, moves) => {
         return scores;
     };
     const decreasalSort = (collection) => {
-        return collection.sort((a, b) => b - a);
+        return collection?.sort((a, b) => b - a);
     };
     const rotateMatrix90Deg = (matrix) => {
         return matrix.map((row, i) => row.map((val, j) => matrix[matrix.length - 1 - j][i]));
@@ -143,7 +146,6 @@ export const Scoring = (squareDimension, moves) => {
         let str = '';
         for (let x = 0; x < squareDimension * 2 - 1; x++) {
             newRow = [];
-            debugger;
             str = '';
             if (a >= squareDimension - 1) {
                 peakPoint = true;
@@ -156,7 +158,6 @@ export const Scoring = (squareDimension, moves) => {
                 }
             }
             newMatrix.push(newRow);
-            console.log(str);
             if (a < squareDimension - 1 && !peakPoint) {
                 a++;
                 b--;
@@ -168,12 +169,23 @@ export const Scoring = (squareDimension, moves) => {
         }
         return newMatrix;
     };
+    const finalScores = () => {
+        let xH = horizontalScoring('x');
+        let oH = horizontalScoring('o');
+        let xV = verticalScoring('x');
+        let oV = verticalScoring('o');
+        let rightDiagonalX = rightDiagonalScoring('x');
+        let rightDiagonalO = rightDiagonalScoring('o');
+        let leftDiagonalX = leftDiagonalScoring('x');
+        let leftDiagonalO = leftDiagonalScoring('o');
+        let totalX = xH + xV + rightDiagonalX + leftDiagonalX;
+        let totalO = oH + oV + rightDiagonalO + leftDiagonalO;
+        GameStats.addScore('x', totalX);
+        GameStats.addScore('o', totalO);
+    };
     preInit();
     return {
-        horizontalScoring,
-        verticalScoring,
-        rightDiagonalScoring,
-        leftDiagonalScoring
+        finalScores
     };
 };
 //# sourceMappingURL=scoring.js.map

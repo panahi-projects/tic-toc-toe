@@ -1,5 +1,4 @@
 import { IMove, IPlayer, IPlayerMove, TSymbol, TType } from '../interfaces/index.js';
-import GameStatsInstance from './gameStats.js';
 
 let instance: any;
 let moves: IMove = {
@@ -18,6 +17,23 @@ class Moves {
     constructor() {
         if (instance) throw new Error('New instance cannot be created!');
         instance = this;
+    }
+    resetMoves() {
+        moves = {
+            x: {
+                player: {} as IPlayer,
+                selectedCells: []
+            },
+            o: {
+                player: {} as IPlayer,
+                selectedCells: []
+            }
+        };
+        currentTurn = 'x';
+    }
+    doesExistAnyMove() {
+        if (moves?.o?.selectedCells?.length > 0 || moves?.x?.selectedCells?.length > 0) return true;
+        return false;
     }
     getMoves() {
         return moves;

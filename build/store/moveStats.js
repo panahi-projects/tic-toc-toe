@@ -16,6 +16,24 @@ class Moves {
             throw new Error('New instance cannot be created!');
         instance = this;
     }
+    resetMoves() {
+        moves = {
+            x: {
+                player: {},
+                selectedCells: []
+            },
+            o: {
+                player: {},
+                selectedCells: []
+            }
+        };
+        currentTurn = 'x';
+    }
+    doesExistAnyMove() {
+        if (moves?.o?.selectedCells?.length > 0 || moves?.x?.selectedCells?.length > 0)
+            return true;
+        return false;
+    }
     getMoves() {
         return moves;
     }

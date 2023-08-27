@@ -23,13 +23,13 @@ class GameStats {
     getLastStats() {
         return stats[stats.length - 1];
     }
-    addScore(playerNum, addedValue) {
+    addScore(playerSymbol, newValue) {
         let lastStat = { ...this.getLastStats() };
-        if (playerNum === 1) {
-            lastStat.player1.score += addedValue;
+        if (lastStat.player1.symbol === playerSymbol) {
+            lastStat.player1.score = newValue;
         }
-        else if (playerNum === 2) {
-            lastStat.player2.score += addedValue;
+        else {
+            lastStat.player2.score = newValue;
         }
         this.updateStats(lastStat);
     }

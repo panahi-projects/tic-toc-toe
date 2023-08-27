@@ -1,6 +1,7 @@
 import { IMatrix, IMove, TSymbol } from '../interfaces/index.js';
+import GameStats from '../store/gameStats.js';
 
-export const Scoring = (squareDimension: number, moves: IMove) => {
+export const Scoring = (squareDimension: number, moves: IMove = { x: {}, o: {} } as IMove) => {
     let xMoves: number[]; //desc sorted x moves
     let oMoves: number[]; //desc sorted o moves
     let xMatrix: number[][] = [];
@@ -33,6 +34,8 @@ export const Scoring = (squareDimension: number, moves: IMove) => {
     const getSelectedAreas = (playerMoves: number[]): IMatrix => {
         let matrix: IMatrix = {};
         let rowNum, colNum;
+        if (!playerMoves?.length) return {} as IMatrix;
+
         for (const move of playerMoves) {
             rowNum = rowNumber(move);
             colNum = colNumber(move);
@@ -68,7 +71,7 @@ export const Scoring = (squareDimension: number, moves: IMove) => {
             let splittedCombination = strMatRow.split('0').filter((x) => x.length);
 
             for (const sc of splittedCombination) {
-                if (sc.length >= 3) scores += sc.length * 10;
+                if (sc.length >= 3) scores += sc.length * 100;
             }
         }
         return scores;
@@ -112,7 +115,7 @@ export const Scoring = (squareDimension: number, moves: IMove) => {
         return scores;
     };
     const decreasalSort = (collection: number[]) => {
-        return collection.sort((a, b) => b - a);
+        return collection?.sort((a, b) => b - a);
     };
     const rotateMatrix90Deg = (matrix: number[][]) => {
         return matrix.map((row, i) => row.map((val, j) => matrix[matrix.length - 1 - j][i]));
@@ -156,7 +159,6 @@ export const Scoring = (squareDimension: number, moves: IMove) => {
         let str = '';
         for (let x = 0; x < squareDimension * 2 - 1; x++) {
             newRow = [];
-            debugger;
             str = '';
             if (a >= squareDimension - 1) {
                 peakPoint = true;
@@ -169,7 +171,6 @@ export const Scoring = (squareDimension: number, moves: IMove) => {
                 }
             }
             newMatrix.push(newRow);
-            console.log(str);
 
             if (a < squareDimension - 1 && !peakPoint) {
                 a++;
@@ -181,12 +182,28 @@ export const Scoring = (squareDimension: number, moves: IMove) => {
         }
         return newMatrix;
     };
+    const finalScores = () => {
+        let xH = horizontalScoring('x');
+        let oH = horizontalScoring('o');
+
+        let xV = verticalScoring('x');
+        let oV = verticalScoring('o');
+
+        let rightDiagonalX = rightDiagonalScoring('x');
+        let rightDiagonalO = rightDiagonalScoring('o');
+
+        let leftDiagonalX = leftDiagonalScoring('x');
+        let leftDiagonalO = leftDiagonalScoring('o');
+
+        let totalX: number = xH + xV + rightDiagonalX + leftDiagonalX;
+        let totalO: number = oH + oV + rightDiagonalO + leftDiagonalO;
+
+        GameStats.addScore('x', totalX);
+        GameStats.addScore('o', totalO);
+    };
     preInit();
 
     return {
-        horizontalScoring,
-        verticalScoring,
-        rightDiagonalScoring,
-        leftDiagonalScoring
+        finalScores
     };
 };

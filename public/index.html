@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Web server</title>
+        <title>Tic Tac Toe</title>
         <style>
             :root {
                 --dimension: 3;
@@ -14,10 +14,24 @@
     <body>
         <div id="app">
             <div id="gameField" class="container">
-                <h1 class="title">Tic Toc Toe</h1>
-                <!-- <div id="playground" class="playground flexbox"></div> -->
-                <div class="actions clearfix"></div>
+                <h1 class="title">Tic Tac Toe</h1>
+                <div class="current-turn">CURRENT TURN: <span id="currentTurn"></span></div>
+                <!-- Plaground goes here... -->
+
+                <div class="score-board board-left">
+                    <div class="player-score">
+                        <div class="player-title">PLAYER <span class="cell-x">X</span></div>
+                        <div id="xScore" class="score">0</div>
+                    </div>
+                </div>
+                <div class="score-board board-right">
+                    <div class="player-score">
+                        <div class="player-title">PLAYER <span class="cell-o">O</span></div>
+                        <div id="oScore" class="score">0</div>
+                    </div>
+                </div>
             </div>
+            <div class="actions"></div>
         </div>
         <script type="module" src="../build/index.js"></script>
     </body>

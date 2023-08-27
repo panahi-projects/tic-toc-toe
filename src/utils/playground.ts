@@ -2,7 +2,7 @@ import { CreateElement } from './createElement.js';
 import { IMove, IPlayer, IPlayerMove, IPlayground, IStat, TSymbol } from '../interfaces/index.js';
 import GameStats from '../store/gameStats.js';
 import { generateID } from './global.js';
-import { makeMove } from './gamePlay.js';
+import { makeMove, getCurrentTurn } from './gamePlay.js';
 import MovesInstance from '../store/moveStats.js';
 import { Scoring } from '../utils/index.js';
 
@@ -20,6 +20,13 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
             score: 0
         };
         return player;
+    };
+    const reset = () => {
+        MovesInstance.resetMoves();
+        preInit();
+        updateScoreBoard();
+        const currentTurnSpan = document.querySelector('#currentTurn') as HTMLElement;
+        currentTurnSpan.innerHTML = 'X';
     };
     const preInit = () => {
         const player1: IPlayer = definePlayer('x');
@@ -54,10 +61,12 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
             playgroundSchema.childNodes.push(cell);
         }
         const playground = CreateElement(playgroundSchema);
-        return parentTag.appendChild(playground);
+        const newTag = parentTag.appendChild(playground);
+        return newTag;
     };
     const handleClick = (event) => {
         if (!event?.target?.id) throw new Error('Element Id is not recognized!');
+        makeResetButton();
         const id = +event.target.id;
 
         let currentTurn: TSymbol = MovesInstance.getCurrentTurn();
@@ -65,25 +74,11 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         let currentPlayer =
             lastGameStats?.player1?.symbol === currentTurn ? lastGameStats?.player1 : lastGameStats?.player2;
         let moves: IMove = makeMove(id, currentTurn, currentPlayer);
-        // console.log('moves:', moves);
 
         const scoring = Scoring(squareDimension, moves);
-        let xH = scoring.horizontalScoring('x');
-        let oH = scoring.horizontalScoring('o');
+        scoring.finalScores();
 
-        let xV = scoring.verticalScoring('x');
-        let oV = scoring.verticalScoring('o');
-
-        let rightDiagonalX = scoring.rightDiagonalScoring('x');
-        let rightDiagonalO = scoring.rightDiagonalScoring('o');
-
-        let leftDiagonalX = scoring.leftDiagonalScoring('x');
-        let leftDiagonalO = scoring.leftDiagonalScoring('o');
-
-        let totalX: number = xH + xV + rightDiagonalX + leftDiagonalX;
-        let totalO: number = oH + oV + rightDiagonalO + leftDiagonalO;
-        console.log('totalX: ', totalX);
-        console.log('totalO: ', totalO);
+        updateScoreBoard();
 
         MovesInstance.updateTurn(currentTurn === 'x' ? 'o' : 'x');
         const playerMove: IPlayerMove = {
@@ -92,6 +87,41 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         };
         playerMove.selectedCells.push(id);
         MovesInstance.updateMoves(playerMove);
+    };
+    const resetButtonHandler = () => {
+        const playground = document.querySelector('#playground') as HTMLElement;
+        playground.remove();
+        const actions: HTMLElement = document.querySelector('.actions') as HTMLElement;
+        actions?.removeChild(actions.lastChild as HTMLElement);
+
+        reset();
+        init();
+    };
+    const makeResetButton = () => {
+        const hasAnyMove = MovesInstance.doesExistAnyMove();
+        if (!hasAnyMove) return;
+
+        const actionsDiv: HTMLElement = document.querySelector('.actions') as HTMLElement;
+        if (actionsDiv.querySelector('button')) return;
+
+        const resetButtonSchema = {
+            id: 'reset',
+            tag: 'button',
+            className: 'btn btn-glow',
+            textContent: 'RESET',
+            onclick: resetButtonHandler
+        };
+        const resetButton = CreateElement(resetButtonSchema);
+        actionsDiv.appendChild(resetButton);
+    };
+    const updateScoreBoard = () => {
+        const gameStats = GameStats.getLastStats();
+
+        let xScore = document.querySelector('#xScore') as HTMLElement;
+        let oScore = document.querySelector('#oScore') as HTMLElement;
+
+        xScore.innerHTML = gameStats.player1.score.toString();
+        oScore.innerHTML = gameStats.player2.score.toString();
     };
 
     preInit();

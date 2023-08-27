@@ -36,6 +36,18 @@ export const makeMove = (cellNumber, currentTurn, player) => {
         ...moves,
         [symbol]: playerMove
     };
+    getCurrentTurn();
     return updatedMove;
+};
+export const getCurrentTurn = () => {
+    let turn = MovesInstance.getCurrentTurn();
+    const currentTurnSpan = document.querySelector('#currentTurn');
+    if (!currentTurnSpan.innerHTML.length) {
+        currentTurnSpan.innerHTML = turn.toUpperCase();
+    }
+    else {
+        currentTurnSpan.innerHTML = turn == 'x' ? 'O' : 'X';
+    }
+    return turn;
 };
 //# sourceMappingURL=gamePlay.js.map
