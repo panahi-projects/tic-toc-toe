@@ -5,7 +5,7 @@ declare class Moves {
     doesExistAnyMove(): boolean;
     getMoves(): IMove;
     updateMoves(playerMove: IPlayerMove): IMove;
-    getCurrentTurn(): TSymbol;
+    currentTurn(): TSymbol;
     updateTurn(turn: TSymbol): void;
 }
 declare const movesInstance: Readonly<Moves>;

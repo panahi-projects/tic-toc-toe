@@ -1,14 +1,15 @@
-import { CreateElement } from './createElement.js';
+import { CreateElement } from './global.js';
 import { IMove, IPlayer, IPlayerMove, IPlayground, IStat, TSymbol } from '../interfaces/index.js';
 import GameStats from '../store/gameStats.js';
 import { generateID } from './global.js';
-import { makeMove, getCurrentTurn } from './gamePlay.js';
+import { makeMove } from './gamePlay.js';
 import MovesInstance from '../store/moveStats.js';
-import { Scoring } from '../utils/index.js';
+import { Scoring } from '../utils/scoring.js';
 
 export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
     let rootCSS = document.querySelector(':root') as HTMLElement;
     rootCSS.style.setProperty('--dimension', `${squareDimension}`);
+
     const definePlayer = (playerSymbol: TSymbol): IPlayer => {
         const id = generateID(24);
         const player: IPlayer = {
@@ -69,7 +70,7 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         makeResetButton();
         const id = +event.target.id;
 
-        let currentTurn: TSymbol = MovesInstance.getCurrentTurn();
+        let currentTurn: TSymbol = MovesInstance.currentTurn();
         let lastGameStats = GameStats.getLastStats();
         let currentPlayer =
             lastGameStats?.player1?.symbol === currentTurn ? lastGameStats?.player1 : lastGameStats?.player2;

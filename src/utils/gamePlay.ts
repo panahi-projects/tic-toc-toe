@@ -1,4 +1,4 @@
-import { CreateElement } from './createElement.js';
+import { CreateElement } from './global.js';
 import { IMove, IPlayer, IPlayerMove, TSymbol } from '../interfaces/index.js';
 import MovesInstance from '../store/moveStats.js';
 
@@ -44,7 +44,7 @@ export const makeMove = (cellNumber: number, currentTurn: TSymbol, player: IPlay
     return updatedMove;
 };
 export const getCurrentTurn = () => {
-    let turn = MovesInstance.getCurrentTurn();
+    let turn = MovesInstance.currentTurn();
     const currentTurnSpan = document.querySelector('#currentTurn') as HTMLElement;
 
     if (!currentTurnSpan.innerHTML.length) {

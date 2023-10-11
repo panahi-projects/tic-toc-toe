@@ -1,9 +1,9 @@
-import { CreateElement } from './createElement.js';
+import { CreateElement } from './global.js';
 import GameStats from '../store/gameStats.js';
 import { generateID } from './global.js';
 import { makeMove } from './gamePlay.js';
 import MovesInstance from '../store/moveStats.js';
-import { Scoring } from '../utils/index.js';
+import { Scoring } from '../utils/scoring.js';
 export const Playground = (squareDimension, parentTag) => {
     let rootCSS = document.querySelector(':root');
     rootCSS.style.setProperty('--dimension', `${squareDimension}`);
@@ -66,7 +66,7 @@ export const Playground = (squareDimension, parentTag) => {
             throw new Error('Element Id is not recognized!');
         makeResetButton();
         const id = +event.target.id;
-        let currentTurn = MovesInstance.getCurrentTurn();
+        let currentTurn = MovesInstance.currentTurn();
         let lastGameStats = GameStats.getLastStats();
         let currentPlayer = lastGameStats?.player1?.symbol === currentTurn ? lastGameStats?.player1 : lastGameStats?.player2;
         let moves = makeMove(id, currentTurn, currentPlayer);

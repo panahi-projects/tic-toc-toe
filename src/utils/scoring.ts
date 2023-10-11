@@ -201,6 +201,7 @@ export const Scoring = (squareDimension: number, moves: IMove = { x: {}, o: {} }
         GameStats.addScore('x', totalX);
         GameStats.addScore('o', totalO);
     };
+
     preInit();
 
     return {

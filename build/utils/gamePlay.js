@@ -1,4 +1,4 @@
-import { CreateElement } from './createElement.js';
+import { CreateElement } from './global.js';
 import MovesInstance from '../store/moveStats.js';
 export const makeMove = (cellNumber, currentTurn, player) => {
     // next 4 lines are for preventing to add more than one item in each section
@@ -40,7 +40,7 @@ export const makeMove = (cellNumber, currentTurn, player) => {
     return updatedMove;
 };
 export const getCurrentTurn = () => {
-    let turn = MovesInstance.getCurrentTurn();
+    let turn = MovesInstance.currentTurn();
     const currentTurnSpan = document.querySelector('#currentTurn');
     if (!currentTurnSpan.innerHTML.length) {
         currentTurnSpan.innerHTML = turn.toUpperCase();

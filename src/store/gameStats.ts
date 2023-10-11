@@ -1,4 +1,4 @@
-import { IPlayer, IStat, TSymbol } from '../interfaces/index.js';
+import { IStat, TSymbol } from '../interfaces/index.js';
 
 let instance: any;
 const stats: IStat[] = [];

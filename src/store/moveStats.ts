@@ -48,7 +48,7 @@ class Moves {
         }
         return moves;
     }
-    getCurrentTurn() {
+    currentTurn() {
         return currentTurn;
     }
     updateTurn(turn: TSymbol) {
