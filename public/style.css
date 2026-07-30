@@ -163,3 +163,111 @@ body {
         font-size: 22px;
     }
 }
+
+/* ===== winner modal & firework ===== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 4, 24, 0.86);
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+.modal-overlay.is-open {
+    opacity: 1;
+}
+.firework-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.modal {
+    position: relative;
+    z-index: 2;
+    min-width: 320px;
+    max-width: 90%;
+    padding: 28px 48px 36px;
+    text-align: center;
+    background: rgb(95, 15, 191);
+    background: linear-gradient(150deg, rgba(95, 15, 191, 0.96) 0%, rgba(170, 20, 111, 0.96) 100%);
+    border-radius: 16px;
+    box-shadow:
+        0 0 50px rgba(3, 188, 244, 0.35),
+        0 24px 60px rgba(0, 0, 0, 0.55);
+    transform: translateY(28px) scale(0.9);
+    transition: transform 0.45s cubic-bezier(0.18, 1.35, 0.4, 1);
+}
+.modal-overlay.is-open .modal {
+    transform: translateY(0) scale(1);
+}
+.modal-badge {
+    font-size: 64px;
+    line-height: 1;
+    margin-bottom: 4px;
+    animation: badgePop 0.6s cubic-bezier(0.2, 1.6, 0.4, 1) both;
+}
+@keyframes badgePop {
+    0% {
+        transform: scale(0.2) rotate(-18deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+}
+.modal-title {
+    text-transform: uppercase;
+    font-size: 38px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 14px;
+}
+.modal-scores {
+    font-size: 26px;
+    color: #e7da99;
+    margin-bottom: 22px;
+}
+.modal-scores .cell-x,
+.modal-scores .cell-o {
+    font-size: 30px;
+    font-weight: 600;
+}
+.modal-scores .modal-dash {
+    color: #fff;
+    opacity: 0.4;
+    margin: 0 12px;
+}
+.modal .btn {
+    transform: none;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    border: 1px solid #03bcf4;
+    border-radius: 6px;
+    padding: 8px 24px;
+}
+.modal .btn:hover {
+    background: rgba(3, 188, 244, 0.16);
+}
+@media only screen and (max-width: 600px) {
+    .modal {
+        min-width: 0;
+        padding: 22px 26px 28px;
+    }
+    .modal-title {
+        font-size: 26px;
+    }
+    .modal-badge {
+        font-size: 48px;
+    }
+}

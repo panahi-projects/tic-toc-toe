@@ -5,10 +5,18 @@ import { generateID } from './global.js';
 import { makeMove } from './gamePlay.js';
 import MovesInstance from '../store/moveStats.js';
 import { Scoring } from '../utils/scoring.js';
+import { WinnerModal } from './winnerModal.js';
+
+// set it to true if you prefer the classic rule: the game stops at the first line of 3.
+// a line of exactly 3 is worth 300 points, hence any score >= 300 means such a line exists.
+const SUDDEN_DEATH: boolean = false;
+const WINNING_SCORE: number = 300;
 
 export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
     let rootCSS = document.querySelector(':root') as HTMLElement;
     rootCSS.style.setProperty('--dimension', `${squareDimension}`);
+
+    const winnerModal = WinnerModal();
 
     const definePlayer = (playerSymbol: TSymbol): IPlayer => {
         const id = generateID(24);
@@ -23,6 +31,7 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         return player;
     };
     const reset = () => {
+        winnerModal.hide();
         MovesInstance.resetMoves();
         preInit();
         updateScoreBoard();
@@ -65,7 +74,24 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         const newTag = parentTag.appendChild(playground);
         return newTag;
     };
+    const isBoardFull = () => {
+        return MovesInstance.totalMoves() >= Math.pow(squareDimension, 2);
+    };
+    const finishGame = () => {
+        MovesInstance.setGameOver(true);
+
+        const gameStats = GameStats.getLastStats();
+        const xScore: number = gameStats.player1.score;
+        const oScore: number = gameStats.player2.score;
+
+        let winner: TSymbol | null = null;
+        if (xScore > oScore) winner = 'x';
+        else if (oScore > xScore) winner = 'o';
+
+        winnerModal.show(winner, xScore, oScore, resetButtonHandler);
+    };
     const handleClick = (event) => {
+        if (MovesInstance.gameOver()) return;
         if (!event?.target?.id) throw new Error('Element Id is not recognized!');
         makeResetButton();
         const id = +event.target.id;
@@ -75,6 +101,11 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         let currentPlayer =
             lastGameStats?.player1?.symbol === currentTurn ? lastGameStats?.player1 : lastGameStats?.player2;
         let moves: IMove = makeMove(id, currentTurn, currentPlayer);
+
+        // `makeMove()` returns an empty object when the cell was already taken.
+        // it must be caught here, otherwise `Scoring()` reads `selectedCells` of undefined
+        // and the turn would be switched without putting any symbol on the board.
+        if (!moves?.x) return;
 
         const scoring = Scoring(squareDimension, moves);
         scoring.finalScores();
@@ -88,12 +119,21 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         };
         playerMove.selectedCells.push(id);
         MovesInstance.updateMoves(playerMove);
+
+        // the move of this click is already counted by now, hence the check comes at the end
+        const gameStats = GameStats.getLastStats();
+        const hasWinningLine: boolean =
+            gameStats.player1.score >= WINNING_SCORE || gameStats.player2.score >= WINNING_SCORE;
+
+        if (isBoardFull() || (SUDDEN_DEATH && hasWinningLine)) {
+            finishGame();
+        }
     };
     const resetButtonHandler = () => {
         const playground = document.querySelector('#playground') as HTMLElement;
-        playground.remove();
+        playground?.remove();
         const actions: HTMLElement = document.querySelector('.actions') as HTMLElement;
-        actions?.removeChild(actions.lastChild as HTMLElement);
+        if (actions?.lastChild) actions.removeChild(actions.lastChild);
 
         reset();
         init();

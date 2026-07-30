@@ -10,6 +10,7 @@ let moves = {
     }
 };
 let currentTurn = 'x';
+let isGameOver = false;
 class Moves {
     constructor() {
         if (instance)
@@ -28,6 +29,16 @@ class Moves {
             }
         };
         currentTurn = 'x';
+        isGameOver = false;
+    }
+    totalMoves() {
+        return (moves?.x?.selectedCells?.length || 0) + (moves?.o?.selectedCells?.length || 0);
+    }
+    gameOver() {
+        return isGameOver;
+    }
+    setGameOver(value) {
+        isGameOver = value;
     }
     doesExistAnyMove() {
         if (moves?.o?.selectedCells?.length > 0 || moves?.x?.selectedCells?.length > 0)

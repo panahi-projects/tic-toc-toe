@@ -32,3 +32,25 @@ export interface IMove {
 export interface IMatrix {
     [key: number]: number[];
 }
+export interface IFireworkParticle {
+    x: number;
+    y: number;
+    px: number;
+    py: number;
+    vx: number;
+    vy: number;
+    life: number;
+    maxLife: number;
+    color: string;
+    size: number;
+}
+export interface IFireworkRocket {
+    x: number;
+    y: number;
+    px: number;
+    py: number;
+    vx: number;
+    vy: number;
+    targetY: number;
+    color: string;
+}

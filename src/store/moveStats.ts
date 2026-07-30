@@ -12,6 +12,7 @@ let moves: IMove = {
     }
 } as IMove;
 let currentTurn: TSymbol = 'x';
+let isGameOver: boolean = false;
 
 class Moves {
     constructor() {
@@ -30,6 +31,16 @@ class Moves {
             }
         };
         currentTurn = 'x';
+        isGameOver = false;
+    }
+    totalMoves() {
+        return (moves?.x?.selectedCells?.length || 0) + (moves?.o?.selectedCells?.length || 0);
+    }
+    gameOver() {
+        return isGameOver;
+    }
+    setGameOver(value: boolean) {
+        isGameOver = value;
     }
     doesExistAnyMove() {
         if (moves?.o?.selectedCells?.length > 0 || moves?.x?.selectedCells?.length > 0) return true;
