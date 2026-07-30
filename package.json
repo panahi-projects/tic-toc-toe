@@ -21,7 +21,8 @@
     ],
     "author": {
         "name": "Saeed Panahi",
-        "email": "panahi.projects@gmail.com"
+        "email": "panahi.projects@gmail.com",
+        "url": "panahi-projects.ir"
     },
     "license": "ISC",
     "dependencies": {
