@@ -564,7 +564,7 @@ rockets.
 
 Now we glue everything together in `./src/utils/playground.ts`.
 
-First the imports and two constants at the top of the file, outside the module:
+First the imports, two constants and the modal itself at the top of the file, **outside** the module:
 
 ```ts
 import { WinnerModal } from './winnerModal.js';
@@ -573,13 +573,27 @@ import { WinnerModal } from './winnerModal.js';
 // a line of exactly 3 is worth 300 points, hence any score >= 300 means such a line exists.
 const SUDDEN_DEATH: boolean = false;
 const WINNING_SCORE: number = 300;
-```
 
-Then, inside `Playground()`, right after the two `rootCSS` lines, create the modal once:
-
-```ts
+// one modal for the whole app, and not one per playground — so a new board is able to close
+// the modal that a previous board has opened, for example when the size is changed
 const winnerModal = WinnerModal();
 ```
+
+Why is the modal created outside `Playground()` and not inside it?! because later in this article we
+are going to let the players change the board size, and changing the size builds a **new**
+`Playground`. If every playground had its own private modal, then the new board would have no way to
+close the modal that the old board left open on the screen, and the firework of the finished game would
+keep flying over a fresh empty board. One modal for the whole application is simply the truth here —
+there is never more than one on the screen.
+
+And for the same reason, add this line inside `Playground()`, right after the two `rootCSS` lines:
+
+```ts
+winnerModal.hide();
+```
+
+So whenever a playground is created, anything left on the screen from the previous one is cleaned up,
+including the canvas and its animation loop.
 
 Now the method that actually decides who won. This is the one we postponed in the Step 1:
 
@@ -960,8 +974,14 @@ part 2, that method shows the opposite symbol when the span is not empty — so 
 in there, a fresh game would start by telling the players it is X's turn while the store says
 something else.
 
-And the `--dimension` CSS variable takes care of itself, because `Playground()` sets it in its first
-two lines every time it is created.
+And two things take care of themselves, which is exactly why we set them up the way we did:
+
+- the `--dimension` CSS variable, because `Playground()` sets it in its first two lines every time it
+  is created
+- the winner modal, because of the `winnerModal.hide()` we added inside `Playground()` in the previous
+  section. Try it: finish a game, and while the firework is still flying **change the board size**. The
+  modal and the canvas disappear and you get a clean new board. If we had created one modal per
+  playground, that stale modal would still be covering your new game.
 
 #### Step 4:Run the whole thing
 
@@ -985,10 +1005,28 @@ A little tip if you are impatient like me: filling a 5x5 board needs 25 clicks e
 check the firework. Hence, while you are working on the modal, set `SUDDEN_DEATH` to `true` for a while
 — then three symbols in a row are enough to trigger it.
 
-One honest note about the big boards: our `.playground` width is `calc(var(--dimension) * 100px)`,
-which means an 8x8 board is 800px wide and it does not shrink on small screens. That is why I stopped
-the dropdown at 8. Making the cells responsive is a nice exercise if you want to continue — you would
-need to replace the fixed `100px` with something based on `vmin`.
+**And now an honest note about the big boards.** ⚠️
+
+Our `.playground` width is `calc(var(--dimension) * 100px)`, so every cell always stays around 100px
+and it is the **board** that grows: 3x3 is 324px wide, 5x5 is 524px, and 8x8 is 824px. It never
+shrinks to fit the screen.
+
+Up to 6x6 it looks good on a normal laptop. From 7x7 the board becomes wider than the free space that
+our two score boards are sitting in — and because `.score-board` is `position: absolute` with
+`width: 25%` pinned to the edges of the window, the big `PLAYER X` / `PLAYER O` titles start to overlap
+the corners of the board. On an 8x8 the bottom rows also go below the fold on a short screen.
+
+So the dropdown works on every size, but if you want the layout to stay clean you have two ways:
+
+- the quick one — offer only up to `6 x 6` in the `<select>` and forget about it
+- the proper one — make the cell size responsive instead of fixed. Be careful though, it is not only
+  the `100px`: the `- 46px` in the cell width and the `padding: 40px 20px` and the `font-size: 92px` of
+  the symbols were all chosen for a ~100px cell, hence all four of them have to scale together.
+  Otherwise your cells stop being square and the rows get clipped by the `overflow: hidden` of the
+  board.
+
+I left the fixed size, because for me this game is a 5x5 game and the bigger boards are there to prove
+that the scoring engine does not care. But it is a good exercise if you want to continue. 😉
 
 ### If you prefer the classic rule instead
 

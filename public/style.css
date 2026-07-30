@@ -154,6 +154,23 @@ body {
     font-size: 18px;
     text-align: center;
 }
+.settings {
+    text-align: center;
+    margin-top: 4px;
+    color: #e7da99;
+    font-size: 16px;
+}
+.settings select {
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    border: 1px solid #03bcf4;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: 'Varela Round', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    outline: none;
+}
 @media only screen and (max-width: 1200px) {
     .score-board {
         top: 10px;

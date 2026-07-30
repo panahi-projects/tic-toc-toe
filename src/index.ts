@@ -1,14 +1,38 @@
 'use strict';
 import { getCurrentTurn } from './utils/gamePlay.js';
 import { Playground } from './utils/playground.js';
+import MovesInstance from './store/moveStats.js';
 
 (function () {
-    const GRID_SIZE = 5;
+    const DEFAULT_GRID_SIZE = 5;
     console.log('Game is running!');
 
     const gameField: HTMLElement = document.querySelector('#gameField') as HTMLElement;
-    let playground = Playground(GRID_SIZE, gameField);
-    playground.init();
+    const gridSizeSelect: HTMLSelectElement = document.querySelector('#gridSize') as HTMLSelectElement;
 
-    getCurrentTurn();
+    const startGame = (squareDimension: number) => {
+        // throw away the previous board and the reset button, if they exist
+        const oldPlayground = document.querySelector('#playground');
+        if (oldPlayground) oldPlayground.remove();
+
+        const actions: HTMLElement = document.querySelector('.actions') as HTMLElement;
+        actions.innerHTML = '';
+
+        // clean the state of the previous game
+        MovesInstance.resetMoves();
+        const currentTurnSpan = document.querySelector('#currentTurn') as HTMLElement;
+        currentTurnSpan.innerHTML = '';
+
+        const playground = Playground(squareDimension, gameField);
+        playground.init();
+
+        getCurrentTurn();
+    };
+
+    gridSizeSelect.value = `${DEFAULT_GRID_SIZE}`;
+    startGame(DEFAULT_GRID_SIZE);
+
+    gridSizeSelect.onchange = () => {
+        startGame(+gridSizeSelect.value);
+    };
 })();

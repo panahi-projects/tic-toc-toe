@@ -12,11 +12,15 @@ import { WinnerModal } from './winnerModal.js';
 const SUDDEN_DEATH: boolean = false;
 const WINNING_SCORE: number = 300;
 
+// one modal for the whole app, and not one per playground — so a new board is able to close
+// the modal that a previous board has opened, for example when the size is changed
+const winnerModal = WinnerModal();
+
 export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
     let rootCSS = document.querySelector(':root') as HTMLElement;
     rootCSS.style.setProperty('--dimension', `${squareDimension}`);
 
-    const winnerModal = WinnerModal();
+    winnerModal.hide();
 
     const definePlayer = (playerSymbol: TSymbol): IPlayer => {
         const id = generateID(24);
@@ -72,6 +76,7 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
         }
         const playground = CreateElement(playgroundSchema);
         const newTag = parentTag.appendChild(playground);
+        updateScoreBoard();
         return newTag;
     };
     const isBoardFull = () => {
