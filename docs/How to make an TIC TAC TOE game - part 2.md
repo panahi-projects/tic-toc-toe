@@ -6,7 +6,7 @@ Welcome back to our Tic Tac Toe series, where we're building a fully functional 
 
 Now, it's time to start building upon that foundation and add more advanced features to our game. In this article, we'll focus on implementing the core gameplay mechanics, such as handling user input, updating the game state, and determining the winner. We'll also explore how to use JavaScript design patterns to make our code more organized and scalable. So, let's dive right in and see what we can create!
 
-Click [here](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript) to see the article PART-1
+Click [here](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript-part-1-bnd) to see the article PART-1
 
 **Let's get started...**
 
@@ -442,26 +442,20 @@ import { CreateElement } from './global.js';
 
 **Be careful about the `.js` at the end of the import paths!** ⚠️
 
-This is the part that confuses almost everybody the first time, so let me explain it. The files we
-are writing are `*.ts`, but we import them as `*.js`. It looks wrong, but it is correct, and it is
-mandatory here.
+This is the part that confuses almost everybody the first time, so let me explain it. The files we are writing are `*.ts`, but we import them as `*.js`. It looks wrong, but it is correct, and it is mandatory here.
 
 The reason is that we have no bundler in this project (no Webpack, no Vite). `tsc` converts our
 `*.ts` files to `*.js` files inside `build`, and then the **browser itself** resolves the import
 paths, because in `index.html` we load the app as a native ES module:
 `<script type="module" src="../build/index.js"></script>`
 
-And the browser cannot guess extensions. Whatever string you wrote in the import is exactly what it
-will request from the server. So:
+And the browser cannot guess extensions. Whatever string you wrote in the import is exactly what it will request from the server. So:
 
 - if you write `from './global'` → the browser asks for `/build/utils/global` → **404**
 - if you write `from './global.ts'` → the browser asks for a file that does not exist in `build` → **404**
 - if you write `from './global.js'` → the browser asks for `/build/utils/global.js` → ✅
 
-The important thing to know is that `tsc` does **not** rewrite these paths, it leaves them exactly
-as you typed them. Therefore, always point at the compiled name (`.js`), not at the source name
-(`.ts`). If your game shows an empty page and the console says something like
-"Failed to load module script", this is almost always the reason.
+The important thing to know is that `tsc` does **not** rewrite these paths, it leaves them exactly as you typed them. Therefore, always point at the compiled name (`.js`), not at the source name (`.ts`). If your game shows an empty page and the console says something like "Failed to load module script", this is almost always the reason.
 
 Then, you need to return the `init()` function, and import and call `./src/utils/playground.ts` inside our main `index.ts`
 
@@ -645,8 +639,7 @@ export const generateID = (length: number): string => {
 ```
 
 Then, `preInit()` must be called once, right when the playground is declared — not inside `init()`,
-because `init()` will be called again every time the players reset the game and we don't want to
-create new players on every reset. Hence, call it just before the `return` statement of `Playground()`:
+because `init()` will be called again every time the players reset the game and we don't want to create new players on every reset. Hence, call it just before the `return` statement of `Playground()`:
 
 ```ts
 export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
@@ -681,9 +674,7 @@ export interface IMove {
 }
 ```
 
-So, an `IMove` object holds two records, one for each symbol, and each record keeps the list of the
-cell numbers that this player has selected until now. It means, if X clicked the cells 1, 5 and 9,
-then `moves.x.selectedCells` will be `[1, 5, 9]`.
+So, an `IMove` object holds two records, one for each symbol, and each record keeps the list of the cell numbers that this player has selected until now. It means, if X clicked the cells 1, 5 and 9, then `moves.x.selectedCells` will be `[1, 5, 9]`.
 
 Then, create the file `./src/store/moveStats.ts` as follows:
 
@@ -754,16 +745,14 @@ The methods of this store are as follows:
 
 - `getMoves()` gives us the live `IMove` object, it means the current state of the whole board
 - `updateMoves()` we call it after each move to attach the player object to their own record
-- `doesExistAnyMove()` returns `true` if at least one cell is selected, we will use of it to decide
-  when the `reset` button should appear
+- `doesExistAnyMove()` returns `true` if at least one cell is selected, we will use of it to decide when the `reset` button should appear
+
 - `currentTurn()` returns whose turn it is now, `'x'` or `'o'`
 - `updateTurn()` switches the turn to the other player
 - `resetMoves()` empties everything and gives the turn back to X
 
 Notice that both stores are exported as `Object.freeze(new ClassName())`, and both of them throw an
-error inside the constructor if a second instance is created. That is the whole idea of the
-`Singleton` pattern — no matter from how many different files you import them, you always get the
-same one object, hence the game state never gets duplicated.
+error inside the constructor if a second instance is created. That is the whole idea of the `Singleton` pattern — no matter from how many different files you import them, you always get the same one object, hence the game state never gets duplicated.
 
 #### Step 4:Put the X and O on the board
 
@@ -789,7 +778,9 @@ export const makeMove = (cellNumber: number, currentTurn: TSymbol, player: IPlay
         className: `cell-${currentTurn?.toLowerCase()}`,
         innerHTML: currentTurn
     };
-    let selectedSection: HTMLElement = document.querySelector(`section.cell:nth-child(${cellNumber})`) as HTMLElement;
+    let selectedSection: HTMLElement = document.querySelector(
+        `section.cell:nth-child(${cellNumber})`
+    ) as HTMLElement;
     const cellContent = CreateElement(cellContentSchema);
     selectedSection.appendChild(cellContent);
 
@@ -833,9 +824,7 @@ export const getCurrentTurn = () => {
 
 There are a couple of things in the above code that need to be explained:
 
-- The first `if` block is our guard against cheating (or just double-clicking). If the cell number
-  already exists in the selected cells of X **or** of O, we return an empty object and we draw
-  nothing. So the same cell can never be taken twice.
+- The first `if` block is our guard against cheating (or just double-clicking). If the cell number already exists in the selected cells of X **or** of O, we return an empty object and we draw nothing. So the same cell can never be taken twice.
 
 - `document.querySelector('section.cell:nth-child(' + cellNumber + ')')` — this is the reason we
   numbered our cells starting from **1** and not from 0 in `init()`. CSS `nth-child()` is also
@@ -904,8 +893,7 @@ your players would lose their turn for free.
 
 We are almost there. Three small methods are still missing in `./src/utils/playground.ts`.
 
-The first one only reads the last game stat and writes the two numbers into the score board that we
-prepared in the HTML:
+The first one only reads the last game stat and writes the two numbers into the score board that we prepared in the HTML:
 
 ```ts
 const updateScoreBoard = () => {
@@ -919,8 +907,7 @@ const updateScoreBoard = () => {
 };
 ```
 
-Then the `reset` button. Same like in part 1 we don't want to show it before the first move, hence
-we check `doesExistAnyMove()` first:
+Then the `reset` button. Same like in part 1 we don't want to show it before the first move, hence we check `doesExistAnyMove()` first:
 
 ```ts
 const makeResetButton = () => {
@@ -963,13 +950,9 @@ const resetButtonHandler = () => {
 };
 ```
 
-`resetButtonHandler()` throws away the whole `#playground` element and the button itself, then
-`reset()` empties the moves store and calls `preInit()` again — which means a **brand new contest
-with brand new players** is pushed into `GameStats`, so the old game is still kept in the stats
-array as a history. At the end `init()` builds a fresh empty board.
+`resetButtonHandler()` throws away the whole `#playground` element and the button itself, then `reset()` empties the moves store and calls `preInit()` again — which means a **brand new contest with brand new players** is pushed into `GameStats`, so the old game is still kept in the stats array as a history. At the end `init()` builds a fresh empty board.
 
-Now, update `./src/index.ts` to also call `getCurrentTurn()` once at the startup, so the players see
-`CURRENT TURN: X` before anybody clicked:
+Now, update `./src/index.ts` to also call `getCurrentTurn()` once at the startup, so the players see `CURRENT TURN: X` before anybody clicked:
 
 ```ts
 'use strict';
@@ -1130,7 +1113,7 @@ export const Playground = (squareDimension: number, parentTag: HTMLElement) => {
 
 And the structure of your `src` folder must be same like this:
 
-```
+```plaintext
 src
 ├── index.ts
 ├── interfaces
@@ -1148,15 +1131,14 @@ Now run the app:
 
 `npm run dev`
 
-Then open `http://localhost:3000` and you must see a 5x5 board. Click on the cells one by one and
-check the following things:
+Then open `http://localhost:3000` and you must see a 5x5 board. Click on the cells one by one and check the following things:
 
 - the X and O appear with their glowing colors
 - the `CURRENT TURN` at the top switches after every move
 - the `RESET` button shows up after the very first move, and it really clears the board
 - clicking on a cell that is already taken does absolutely nothing
 
-<!-- TODO(Saeed): screenshot of a played 5x5 board (marks + RESET button visible) -->
+![Image description](https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/soisstvclvk8coko719d.png)
 
 But, both scores are still `0` and they will stay `0` forever, no matter how many symbols you put in
 a row. 😅
@@ -1174,3 +1156,5 @@ exactly the same code that counts the horizontal ones. I made a few animations t
 generation and rotation works, because seeing it is much easier than reading it.
 
 Then, finally, those two big zeros on the score board will start moving. Stay tuned! 😉
+
+[See the part 3 here](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript-part-3-1ko4)
