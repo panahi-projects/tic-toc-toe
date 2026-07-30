@@ -1,3 +1,4 @@
+// Imports
 const express = require('express');
 const createError = require('http-errors');
 const path = require('path');
@@ -5,6 +6,7 @@ const bodyParser = require('body-parser');
 const livereload = require('livereload');
 const connectLiveReload = require('connect-livereload');
 
+// Variable defines:
 const app = express();
 const PORT: number = 3000;
 const COLORS = {
@@ -30,9 +32,9 @@ app.use(express.static(__dirname));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use(function (req: unknown, res: unknown, next: any) {
     next(createError(404));
 });
-app.get('/', (req, res) => {
+app.get('/', (req: unknown, res: any) => {
     res.sendFile(__dirname + '/');
 });

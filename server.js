@@ -1,9 +1,12 @@
+// Imports
 var express = require('express');
 var createError = require('http-errors');
 var path = require('path');
 var bodyParser = require('body-parser');
 var livereload = require('livereload');
 var connectLiveReload = require('connect-livereload');
+
+// Variable defines:
 var app = express();
 var PORT = 3000;
 var COLORS = {
@@ -11,6 +14,7 @@ var COLORS = {
     WHITE: '\u001b[37m'
 };
 var liveReloadServer = livereload.createServer();
+
 liveReloadServer.server.once('connection', function () {
     setTimeout(function () {
         liveReloadServer.refresh('/');
@@ -18,7 +22,11 @@ liveReloadServer.server.once('connection', function () {
 });
 app.use(connectLiveReload());
 app.use(express.static(path.join(__dirname, 'public')));
-app.listen(PORT, function () { return console.log("".concat(COLORS.CYAN, "Server is running on http://localhost:").concat(PORT).concat(COLORS.WHITE)); });
+app.listen(PORT, function () {
+    return console.log(
+        ''.concat(COLORS.CYAN, 'Server is running on http://localhost:').concat(PORT).concat(COLORS.WHITE)
+    );
+});
 // serve the css & js as static
 app.use(express.static(__dirname));
 // get our app to use body parser
