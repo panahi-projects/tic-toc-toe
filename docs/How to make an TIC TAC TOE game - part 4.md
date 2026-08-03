@@ -4,19 +4,12 @@
 
 This is the last part of our Tic Tac Toe series, and we are going to finish the game properly.
 
-In the part 3 we built the scoring engine — the matrix, the four rotations, and the counting of the
-neighbour `1`s. Our board now understands lines on any dimension, and both scores move after every
-click.
+In the [part 3](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript-part-3-1ko4) we built the scoring engine — the matrix, the four rotations, and the counting of the neighbour `1`s. Our board now understands lines on any dimension, and both scores move after every click.
 
-But the game still does not know how to **end**. The players can fill the last cell and nothing
-happens, and nobody wins. Additionally, the dimension of the board is still my hardcoded
-`GRID_SIZE = 5`, which is a shame because the whole reason I started this refactoring was to support
+But the game still does not know how to **end**. The players can fill the last cell and nothing happens, and nobody wins. Additionally, the dimension of the board is still my hardcoded `GRID_SIZE = 5`, which is a shame because the whole reason I started this refactoring was to support
 any size.
 
-And frankly, a game that ends with a `console.log` is not a game. When somebody wins I want a real
-celebration — a firework, and a modal that announces the winner with the final scores. Hence, we are
-going to build both of them from scratch, with a canvas and around 150 lines of Javascript, without
-any library.
+And frankly, a game that ends with a `console.log` is not a game. When somebody wins I want a real celebration — a firework, and a modal that announces the winner with the final scores. Hence, we are going to build both of them from scratch, with a canvas and around 150 lines of Javascript, without any library.
 
 So in this part we do the following things:
 
@@ -24,15 +17,9 @@ So in this part we do the following things:
 - build a firework animation on a `<canvas>`
 - announce the winner in a modal, with a draw state as well
 - let the players choose the board size from the UI
-- and at the end I will show you the two bugs that are hiding in this code, plus a troubleshooting
-  list of everything that went wrong while I was building it
+- and at the end I will show you the two bugs that are hiding in this code, plus a troubleshooting list of everything that went wrong while I was building it
 
-Click [here](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript) to
-see the PART-1 of the series, and here are the
-[PART-2](ADD-PART-2-URL-HERE) and the [PART-3](ADD-PART-3-URL-HERE).
-
-<!-- TODO(Saeed): replace ADD-PART-2-URL-HERE and ADD-PART-3-URL-HERE with the real dev.to links -->
-
+Click [here](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript-part-1-bnd) to see the PART-1 of the series, and here are the [PART-2](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript-part-2-2gda) and the [PART-3 (https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript-part-3-1ko4).
 
 **Let's finish it...**
 
@@ -40,26 +27,19 @@ see the PART-1 of the series, and here are the
 
 In the classic 3x3 game the answer is easy: as soon as somebody has 3 in a row, the game stops.
 
-But our game is not the classic one anymore. On a 5x5 or 8x8 board, stopping at the first line of 3
-would be boring, because the players would never use of the rest of the board and all the work we did
-in the part 3 for counting 4, 5 and 6 in a row would be useless.
+But our game is not the classic one anymore. On a 5x5 or 8x8 board, stopping at the first line of 3 would be boring, because the players would never use of the rest of the board and all the work we did in the part 3 for counting 4, 5 and 6 in a row would be useless.
 
 Hence, I chose a different rule for the big boards:
 
 > The game continues until the board is full. Then the player with the higher score wins.
 
-This rule fits our scoring engine perfectly — long lines are worth more than short ones, so a player
-who builds one line of 5 (500 points) beats a player who builds one line of 3 (300 points), and every
-single cell keeps mattering until the very last click.
+This rule fits our scoring engine perfectly — long lines are worth more than short ones, so a player who builds one line of 5 (500 points) beats a player who builds one line of 3 (300 points), and every single cell keeps mattering until the very last click.
 
-If you prefer the classic sudden-death rule instead, you can do it easily too, and at the end of this
-article I will show you how to switch.
+If you prefer the classic sudden-death rule instead, you can do it easily too, and at the end of this article I will show you how to switch.
 
 #### Step 1:Keep a game-over flag in the store
 
-First of all we need to know how many cells are already taken, and we need somewhere to remember that
-the game has finished. Both of them belong to the moves store, therefore open
-`./src/store/moveStats.ts` and modify it as below.
+First of all we need to know how many cells are already taken, and we need somewhere to remember that the game has finished. Both of them belong to the moves store, therefore open `./src/store/moveStats.ts` and modify it as below.
 
 Add a new variable next to `currentTurn`:
 
@@ -82,8 +62,7 @@ setGameOver(value: boolean) {
 }
 ```
 
-And don't forget to clear the flag inside `resetMoves()`, otherwise after one finished game the board
-would stay frozen forever:
+And don't forget to clear the flag inside `resetMoves()`, otherwise after one finished game the board would stay frozen forever:
 
 ```ts
 resetMoves() {
@@ -160,8 +139,7 @@ export interface IFireworkRocket {
 }
 ```
 
-The `px` and `py` are the **previous** position of the particle, and they are the trick that makes the
-whole thing look like a firework instead of a swarm of dots. I will explain it in a moment.
+The `px` and `py` are the **previous** position of the particle, and they are the trick that makes the whole thing look like a firework instead of a swarm of dots. I will explain it in a moment.
 
 Now create the file `./src/utils/firework.ts`:
 
@@ -203,21 +181,11 @@ export const Firework = (parentTag: HTMLElement) => {
 };
 ```
 
-The colors are not random ones — they are exactly the neon colors we already use in the game: the
-cyan of X, the pink of O, the green of the old winner prompt, the orange of the score board, the cream
-of the player titles, and white.
+The colors are not random ones — they are exactly the neon colors we already use in the game: the cyan of X, the pink of O, the green of the old winner prompt, the orange of the score board, the cream of the player titles, and white.
 
-Two words about `devicePixelRatio`. A canvas has two sizes: how many pixels it really holds
-(`canvas.width`) and how big it is on the screen (its CSS size). On a retina or a scaled Windows
-display those two are not the same, and if you ignore it your firework looks blurry. Hence we
-multiply the real size by the ratio and then we scale the context by the same ratio, so we can keep
-drawing in normal CSS pixels and forget about it.
+Two words about `devicePixelRatio`. A canvas has two sizes: how many pixels it really holds (`canvas.width`) and how big it is on the screen (its CSS size). On a retina or a scaled Windows display those two are not the same, and if you ignore it your firework looks blurry. Hence we multiply the real size by the ratio and then we scale the context by the same ratio, so we can keep drawing in normal CSS pixels and forget about it.
 
-**Be careful about one thing here.** ⚠️ Assigning `canvas.width` does not only resize the canvas, it
-**resets the entire 2d context** — the transform, the line width, the line cap, everything. That is
-why `setTransform()` and `lineCap` are inside `resize()` and not somewhere in the setup. I lost a
-good half an hour on this one, my fireworks were sharp on the first frame and blurry after I resized
-the window. 😅
+**Be careful about one thing here.** ⚠️ Assigning `canvas.width` does not only resize the canvas, it **resets the entire 2d context** — the transform, the line width, the line cap, everything. That is why `setTransform()` and `lineCap` are inside `resize()` and not somewhere in the setup. I lost a good half an hour on this one, my fireworks were sharp on the first frame and blurry after I resized the window. 😅
 
 Then, launching a rocket and exploding it:
 
@@ -270,15 +238,9 @@ The important line in `explode()` is the angle:
 
 `const angle = (Math.PI * 2 * i) / count + randomBetween(-0.06, 0.06);`
 
-`Math.PI * 2` is a full circle in radians, so dividing it by the number of the sparks spreads them
-equally around 360 degrees. And then `Math.cos(angle)` and `Math.sin(angle)` turn that angle into a
-horizontal and a vertical speed. The small random value at the end is what saves it — with a
-perfectly equal spacing the burst looks like a machine-made ring, and with a little noise it looks
-like a real firework.
+`Math.PI * 2` is a full circle in radians, so dividing it by the number of the sparks spreads them equally around 360 degrees. And then `Math.cos(angle)` and `Math.sin(angle)` turn that angle into a horizontal and a vertical speed. The small random value at the end is what saves it — with a perfectly equal spacing the burst looks like a machine-made ring, and with a little noise it looks like a real firework.
 
-Additionally, notice that I don't give all the sparks the same speed. `baseSpeed * randomBetween(0.35, 1)`
-means some sparks fly far and some stay near the center, hence the burst has a **volume** and not just
-an outline.
+Additionally, notice that I don't give all the sparks the same speed. `baseSpeed * randomBetween(0.35, 1)` means some sparks fly far and some stay near the center, hence the burst has a **volume** and not just an outline.
 
 Now the drawing. And here is the `px` / `py` trick I promised:
 
@@ -295,10 +257,7 @@ const drawTrail = (fromX: number, fromY: number, toX: number, toY: number, color
 };
 ```
 
-Instead of drawing a **dot** at the position of the spark, we draw a short **line** from where it was
-on the previous frame to where it is now. The faster the spark moves, the longer that line is — so
-you get the streaks for free, without storing any history. Together with `shadowBlur` it gives the
-same glow that we made with `text-shadow` everywhere else in this game.
+Instead of drawing a **dot** at the position of the spark, we draw a short **line** from where it was on the previous frame to where it is now. The faster the spark moves, the longer that line is — so you get the streaks for free, without storing any history. Together with `shadowBlur` it gives the same glow that we made with `text-shadow` everywhere else in this game.
 
 And the animation loop:
 
@@ -362,21 +321,13 @@ const frame = () => {
 
 A few things worth explaining in the above loop:
 
-- `context.globalCompositeOperation = 'lighter'` makes the overlapping particles **add** their light
-  together instead of painting over each other. That is what gives the bright core in the middle of a
-  burst. Without it a firework looks flat.
+- `context.globalCompositeOperation = 'lighter'` makes the overlapping particles **add** their light together instead of painting over each other. That is what gives the bright core in the middle of a burst. Without it a firework looks flat.
 
-- `context.clearRect()` and not a `fillRect()` with a dark color. Many firework tutorials fill the
-  canvas with a semi-transparent black on every frame to get the fading trails almost for free, but we
-  cannot do that here — our canvas sits **on top of the modal**, so filling it would hide the winner.
-  We keep it fully transparent and we pay for the trails with the `px` / `py` lines instead.
+- `context.clearRect()` and not a `fillRect()` with a dark color. Many firework tutorials fill the canvas with a semi-transparent black on every frame to get the fading trails almost for free, but we cannot do that here — our canvas sits **on top of the modal**, so filling it would hide the winner. We keep it fully transparent and we pay for the trails with the `px` / `py` lines instead.
 
-- both loops go **backwards** (`for (let i = length - 1; i >= 0; i--)`). Be careful about this one: we
-  `splice()` dead particles out of the same array we are walking, and going forward would make the
-  loop skip an item every time something is removed.
+- both loops go **backwards** (`for (let i = length - 1; i >= 0; i--)`). Be careful about this one: we `splice()` dead particles out of the same array we are walking, and going forward would make the loop skip an item every time something is removed.
 
-- `spark.life / spark.maxLife` goes from 1 to 0, so using it as `globalAlpha` gives us the fade out
-  with no extra code.
+- `spark.life / spark.maxLife` goes from 1 to 0, so using it as `globalAlpha` gives us the fade out with no extra code.
 
 At the end, the two methods that the outside world will use:
 
@@ -416,10 +367,7 @@ return {
 };
 ```
 
-**Don't forget the `stop()` method, and don't forget to call it.** A `requestAnimationFrame` loop
-never stops by itself — if you only hide the modal with CSS and you leave the loop running, the
-browser keeps burning your CPU and your laptop fan for the rest of the session. Hence `stop()` cancels
-the frame, removes the resize listener, empties the arrays and takes the canvas out of the DOM.
+**Don't forget the `stop()` method, and don't forget to call it.** A `requestAnimationFrame` loop never stops by itself — if you only hide the modal with CSS and you leave the loop running, the browser keeps burning your CPU and your laptop fan for the rest of the session. Hence `stop()` cancels the frame, removes the resize listener, empties the arrays and takes the canvas out of the DOM.
 
 #### Step 3:The winner modal
 
@@ -530,35 +478,21 @@ export const WinnerModal = () => {
 };
 ```
 
-This is our `Module` pattern again, and the whole modal is built out of `CreateElement()` schemas —
-no `innerHTML` template of the whole thing, no `document.createElement()`. Notice also that the title
-gets the class `cell-x` or `cell-o`, so it reuses the exact glow of the symbol of the winner for free.
+This is our `Module` pattern again, and the whole modal is built out of `CreateElement()` schemas — no `innerHTML` template of the whole thing, no `document.createElement()`. Notice also that the title gets the class `cell-x` or `cell-o`, so it reuses the exact glow of the symbol of the winner for free.
+
 The X wins in cyan and the O wins in pink. 😎
 
-There are four details in the above code that are easy to get wrong, and each of them costs you an
-annoying bug:
+There are four details in the above code that are easy to get wrong, and each of them costs you an annoying bug:
 
-- **The `is-open` class is added one frame later**, inside a `requestAnimationFrame()`. If you append
-  an element and you add the animating class in the same tick, the browser never renders the starting
-  state, so there is nothing to transition **from** and your modal just appears without any animation.
-  One frame of patience is all it needs.
+- **The `is-open` class is added one frame later**, inside a `requestAnimationFrame()`. If you append an element and you add the animating class in the same tick, the browser never renders the starting state, so there is nothing to transition **from** and your modal just appears without any animation. One frame of patience is all it needs.
 
-- **The firework is created after `appendChild()`.** Our `resize()` reads `parentTag.clientWidth`, and
-  an element that is not in the DOM yet has a width of `0`. So the order matters — first put the
-  overlay on the page, then start the firework.
+- **The firework is created after `appendChild()`.** Our `resize()` reads `parentTag.clientWidth`, and an element that is not in the DOM yet has a width of `0`. So the order matters — first put the overlay on the page, then start the firework.
 
-- **`hide()` sets `overlay = null` before the timeout.** Because we wait 350ms for the closing
-  transition, a fast player could press `Escape` and then click the backdrop inside that window, and
-  `remove()` would run twice on the same node. Releasing the reference first makes the second call a
-  no-op.
+- **`hide()` sets `overlay = null` before the timeout.** Because we wait 350ms for the closing transition, a fast player could press `Escape` and then click the backdrop inside that window, and `remove()` would run twice on the same node. Releasing the reference first makes the second call a no-op.
 
-- **The backdrop click checks `event.target === overlay`.** The click event bubbles up from the modal
-  as well, hence without that condition the modal would close when the player clicks the title or the
-  score.
+- **The backdrop click checks `event.target === overlay`.** The click event bubbles up from the modal as well, hence without that condition the modal would close when the player clicks the title or the score.
 
-And why does the firework only start when there is a `winner`?! because a draw is not something to
-celebrate. 🤝 In that case the players still get the modal, with a different badge and title, but no
-rockets.
+And why does the firework only start when there is a `winner`?! because a draw is not something to celebrate. 🤝 In that case the players still get the modal, with a different badge and title, but no rockets.
 
 #### Step 4:Decide the winner and stop the clicks
 
@@ -579,12 +513,7 @@ const WINNING_SCORE: number = 300;
 const winnerModal = WinnerModal();
 ```
 
-Why is the modal created outside `Playground()` and not inside it?! because later in this article we
-are going to let the players change the board size, and changing the size builds a **new**
-`Playground`. If every playground had its own private modal, then the new board would have no way to
-close the modal that the old board left open on the screen, and the firework of the finished game would
-keep flying over a fresh empty board. One modal for the whole application is simply the truth here —
-there is never more than one on the screen.
+Why is the modal created outside `Playground()` and not inside it?! because later in this article we are going to let the players change the board size, and changing the size builds a **new** `Playground`. If every playground had its own private modal, then the new board would have no way to close the modal that the old board left open on the screen, and the firework of the finished game would keep flying over a fresh empty board. One modal for the whole application is simply the truth here — there is never more than one on the screen.
 
 And for the same reason, add this line inside `Playground()`, right after the two `rootCSS` lines:
 
@@ -592,8 +521,7 @@ And for the same reason, add this line inside `Playground()`, right after the tw
 winnerModal.hide();
 ```
 
-So whenever a playground is created, anything left on the screen from the previous one is cleaned up,
-including the canvas and its animation loop.
+So whenever a playground is created, anything left on the screen from the previous one is cleaned up, including the canvas and its animation loop.
 
 Now the method that actually decides who won. This is the one we postponed in the Step 1:
 
@@ -613,13 +541,9 @@ const finishGame = () => {
 };
 ```
 
-`winner` stays `null` when the two scores are equal, and that `null` is exactly what tells the modal
-to show the draw state. Additionally, we pass our existing `resetButtonHandler` as the callback of the
-`PLAY AGAIN` button — so that button does the same thing as the `RESET` button, and we don't write the
-resetting logic twice.
+`winner` stays `null` when the two scores are equal, and that `null` is exactly what tells the modal to show the draw state. Additionally, we pass our existing `resetButtonHandler` as the callback of the `PLAY AGAIN` button — so that button does the same thing as the `RESET` button, and we don't write the resetting logic twice.
 
-Now we connect it to `handleClick()`. Two changes are needed: a guard at the very top, and the
-game-over check at the very bottom.
+Now we connect it to `handleClick()`. Two changes are needed: a guard at the very top, and the game-over check at the very bottom.
 
 ```ts
 const handleClick = (event) => {
@@ -660,17 +584,12 @@ const handleClick = (event) => {
 };
 ```
 
-Why do we check `isBoardFull()` at the **end** and not at the beginning?! because the move of this
-click must be counted first. Remember that `makeMove()` pushes the cell number into the live array
-inside the store, so by the time we reach the last lines, `totalMoves()` already includes the click
-that just happened. If we checked it at the top, the modal would appear one click too late.
+Why do we check `isBoardFull()` at the **end** and not at the beginning?! because the move of this click must be counted first. Remember that `makeMove()` pushes the cell number into the live array inside the store, so by the time we reach the last lines, `totalMoves()` already includes the click that just happened. If we checked it at the top, the modal would appear one click too late.
 
-And the guard on the first line is what really stops the game. Yes, the overlay of the modal covers the
-whole screen so physically it already blocks the mouse from reaching the cells — but never rely only on
+And the guard on the first line is what really stops the game. Yes, the overlay of the modal covers the whole screen so physically it already blocks the mouse from reaching the cells — but never rely only on
 a visual overlay for your game rules. A flag in the store is the honest way. 😉
 
-Two more small changes are needed in the same file. In `reset()` the modal must be closed, otherwise
-after pressing `PLAY AGAIN` the firework would keep running on top of the new board:
+Two more small changes are needed in the same file. In `reset()` the modal must be closed, otherwise after pressing `PLAY AGAIN` the firework would keep running on top of the new board:
 
 ```ts
 const reset = () => {
@@ -698,9 +617,7 @@ const resetButtonHandler = () => {
 };
 ```
 
-The old version called `actions.removeChild(actions.lastChild)` directly, and `removeChild(null)`
-throws. It never happened before because the `RESET` button was always there when the handler ran, but
-it is not a guarantee I want to depend on anymore.
+The old version called `actions.removeChild(actions.lastChild)` directly, and `removeChild(null)` throws. It never happened before because the `RESET` button was always there when the handler ran, but it is not a guarantee I want to depend on anymore.
 
 #### Step 5:The styles of the modal & the canvas
 
@@ -818,19 +735,15 @@ Add the below code at the end of `./public/style.css`:
 
 The parts of the above CSS that are doing the real work are as follows:
 
-- `.firework-canvas` has **`pointer-events: none`**. Without it the canvas would sit on top of the
-  backdrop and swallow every click, so clicking outside the modal would never close it.
-- `.modal` has `z-index: 2` and the canvas has none, hence the rockets fly **behind** the modal box
-  while still being above the dark backdrop.
-- the `.modal .btn` rule resets the `transform: translateY(-20px)` that our old `.btn` class carries.
-  That translate was written for the `RESET` button under the board, and inside the modal it only
-  pushes the button 20 pixels up for no reason.
-- and `.btn` never had a `font-family`, because buttons do not inherit it from the `body` by default —
-  so inside the modal we set `'Varela Round'` explicitly to match the rest of the game.
+- `.firework-canvas` has **`pointer-events: none`**. Without it the canvas would sit on top of the backdrop and swallow every click, so clicking outside the modal would never close it.
 
-By the way, the `.winner-prompt` class that we wrote in the part 2 is not used anymore, the modal has
-completely replaced it. You can delete it from your CSS, or keep it if you want to show a small message
-inside the board for something else later.
+- `.modal` has `z-index: 2` and the canvas has none, hence the rockets fly **behind** the modal box while still being above the dark backdrop.
+
+- the `.modal .btn` rule resets the `transform: translateY(-20px)` that our old `.btn` class carries. That translate was written for the `RESET` button under the board, and inside the modal it only pushes the button 20 pixels up for no reason.
+
+- and `.btn` never had a `font-family`, because buttons do not inherit it from the `body` by default — so inside the modal we set `'Varela Round'` explicitly to match the rest of the game.
+
+By the way, the `.winner-prompt` class that we wrote in the part 2 is not used anymore, the modal has completely replaced it. You can delete it from your CSS, or keep it if you want to show a small message inside the board for something else later.
 
 ### Let the players choose the board size
 
@@ -879,9 +792,7 @@ And add its style at the end of `./public/style.css`:
 
 #### Step 2:Let `init()` refresh the score board
 
-A tiny change with a nice effect. Every time we build a new board we also want the two big numbers to
-go back to `0`, because a new board means new players. Hence, in `./src/utils/playground.ts` call
-`updateScoreBoard()` at the end of `init()`:
+A tiny change with a nice effect. Every time we build a new board we also want the two big numbers to go back to `0`, because a new board means new players. Hence, in `./src/utils/playground.ts` call `updateScoreBoard()` at the end of `init()`:
 
 ```ts
 const init = () => {
@@ -913,8 +824,7 @@ const init = () => {
 
 #### Step 3:Rewrite `index.ts`
 
-Now the main file. Until here it created one `Playground` and that was all. Now it must be able to
-throw the old board away and build a new one with another dimension:
+Now the main file. Until here it created one `Playground` and that was all. Now it must be able to throw the old board away and build a new one with another dimension:
 
 ```ts
 'use strict';
@@ -957,31 +867,19 @@ import MovesInstance from './store/moveStats.js';
 })();
 ```
 
-There are three things in `startGame()` that are easy to forget, and each of them gives you a
-different weird bug:
+There are three things in `startGame()` that are easy to forget, and each of them gives you a different weird bug:
 
-- **removing the old `#playground`** — if you don't, `init()` appends a second board under the first
-  one and you end up with two grids on the page
-- **emptying `.actions`** — otherwise the old `RESET` button stays there and it is still bound to the
-  handler of the **previous** playground module, which points at a board that does not exist anymore
-- **calling `MovesInstance.resetMoves()`** — the stores are `Singleton`s, remember? They survive
-  everything. If you build a new 3x3 board while the store still holds the cell number 24 from the
-  old 5x5 game, then `Scoring()` will try to write into `matrix[4][4]` of a 3x3 matrix and you get an
-  error. Building a new `Playground` does **not** clean the stores, you must do it yourself.
+- **removing the old `#playground`** — if you don't, `init()` appends a second board under the first one and you end up with two grids on the page
+- **emptying `.actions`** — otherwise the old `RESET` button stays there and it is still bound to the handler of the **previous** playground module, which points at a board that does not exist anymore
+- **calling `MovesInstance.resetMoves()`** — the stores are `Singleton`s, remember? They survive everything. If you build a new 3x3 board while the store still holds the cell number 24 from the old 5x5 game, then `Scoring()` will try to write into `matrix[4][4]` of a 3x3 matrix and you get an error. Building a new `Playground` does **not** clean the stores, you must do it yourself.
 
-Also notice that we clear `#currentTurn` before calling `getCurrentTurn()`. As we explained in the
-part 2, that method shows the opposite symbol when the span is not empty — so if we left the old `O`
-in there, a fresh game would start by telling the players it is X's turn while the store says
-something else.
+Also notice that we clear `#currentTurn` before calling `getCurrentTurn()`. As we explained in the part 2, that method shows the opposite symbol when the span is not empty — so if we left the old `O`
+in there, a fresh game would start by telling the players it is X's turn while the store says something else.
 
 And two things take care of themselves, which is exactly why we set them up the way we did:
 
-- the `--dimension` CSS variable, because `Playground()` sets it in its first two lines every time it
-  is created
-- the winner modal, because of the `winnerModal.hide()` we added inside `Playground()` in the previous
-  section. Try it: finish a game, and while the firework is still flying **change the board size**. The
-  modal and the canvas disappear and you get a clean new board. If we had created one modal per
-  playground, that stale modal would still be covering your new game.
+- the `--dimension` CSS variable, because `Playground()` sets it in its first two lines every time it is created
+- the winner modal, because of the `winnerModal.hide()` we added inside `Playground()` in the previous section. Try it: finish a game, and while the firework is still flying **change the board size**. The modal and the canvas disappear and you get a clean new board. If we had created one modal per playground, that stale modal would still be covering your new game.
 
 #### Step 4:Run the whole thing
 
@@ -992,47 +890,30 @@ Open `http://localhost:3000` and now you can:
 - change the board size from the dropdown and watch a brand new grid appear
 - play a full game until the last cell, and get the firework with the winner modal
 - press `PLAY AGAIN` in the modal, or `RESET` under the board — both start a fresh game
-- close the modal with the `Escape` key or by clicking on the dark backdrop, if you want to look at the
-  final board again
-- make a draw on purpose (for example play a 3x3 where nobody makes any line of 3 — both scores stay
-  `0`, so you get `IT IS A DRAW!` with the 🤝 badge and no firework)
+- close the modal with the `Escape` key or by clicking on the dark backdrop, if you want to look at the final board again
+- make a draw on purpose (for example play a 3x3 where nobody makes any line of 3 — both scores stay `0`, so you get `IT IS A DRAW!` with the 🤝 badge and no firework)
 
-<!-- TODO(Saeed): screenshot of a finished game with the firework + winner modal -->
-<!-- TODO(Saeed): screenshot of the draw modal -->
-<!-- TODO(Saeed): screenshot of the board size dropdown open -->
+![Winner screen](https://dev-to-uploads.s3.us-east-2.amazonaws.com/uploads/articles/kw2o7c8cwjexpjeaun9b.gif)
 
-A little tip if you are impatient like me: filling a 5x5 board needs 25 clicks every time you want to
-check the firework. Hence, while you are working on the modal, set `SUDDEN_DEATH` to `true` for a while
+A little tip if you are impatient like me: filling a 5x5 board needs 25 clicks every time you want to check the firework. Hence, while you are working on the modal, set `SUDDEN_DEATH` to `true` for a while
 — then three symbols in a row are enough to trigger it.
 
 **And now an honest note about the big boards.** ⚠️
 
-Our `.playground` width is `calc(var(--dimension) * 100px)`, so every cell always stays around 100px
-and it is the **board** that grows: 3x3 is 324px wide, 5x5 is 524px, and 8x8 is 824px. It never
-shrinks to fit the screen.
+Our `.playground` width is `calc(var(--dimension) * 100px)`, so every cell always stays around 100px and it is the **board** that grows: 3x3 is 324px wide, 5x5 is 524px, and 8x8 is 824px. It never shrinks to fit the screen.
 
-Up to 6x6 it looks good on a normal laptop. From 7x7 the board becomes wider than the free space that
-our two score boards are sitting in — and because `.score-board` is `position: absolute` with
-`width: 25%` pinned to the edges of the window, the big `PLAYER X` / `PLAYER O` titles start to overlap
-the corners of the board. On an 8x8 the bottom rows also go below the fold on a short screen.
+Up to 6x6 it looks good on a normal laptop. From 7x7 the board becomes wider than the free space that our two score boards are sitting in — and because `.score-board` is `position: absolute` with `width: 25%` pinned to the edges of the window, the big `PLAYER X` / `PLAYER O` titles start to overlap the corners of the board. On an 8x8 the bottom rows also go below the fold on a short screen.
 
 So the dropdown works on every size, but if you want the layout to stay clean you have two ways:
 
 - the quick one — offer only up to `6 x 6` in the `<select>` and forget about it
-- the proper one — make the cell size responsive instead of fixed. Be careful though, it is not only
-  the `100px`: the `- 46px` in the cell width and the `padding: 40px 20px` and the `font-size: 92px` of
-  the symbols were all chosen for a ~100px cell, hence all four of them have to scale together.
-  Otherwise your cells stop being square and the rows get clipped by the `overflow: hidden` of the
-  board.
+- the proper one — make the cell size responsive instead of fixed. Be careful though, it is not only the `100px`: the `- 46px` in the cell width and the `padding: 40px 20px` and the `font-size: 92px` of the symbols were all chosen for a ~100px cell, hence all four of them have to scale together. Otherwise your cells stop being square and the rows get clipped by the `overflow: hidden` of the board.
 
-I left the fixed size, because for me this game is a 5x5 game and the bigger boards are there to prove
-that the scoring engine does not care. But it is a good exercise if you want to continue. 😉
+I left the fixed size, because for me this game is a 5x5 game and the bigger boards are there to prove that the scoring engine does not care. But it is a good exercise if you want to continue. 😉
 
 ### If you prefer the classic rule instead
 
-Some people will definitely want the sudden-death rule — the game stops at the first line of 3, same
-like the classic game. And we already prepared it, so there is nothing to write: open
-`./src/utils/playground.ts` and flip the constant at the top of the file.
+Some people will definitely want the sudden-death rule — the game stops at the first line of 3, same like the classic game. And we already prepared it, so there is nothing to write: open `./src/utils/playground.ts` and flip the constant at the top of the file.
 
 ```ts
 const SUDDEN_DEATH: boolean = true;
@@ -1046,24 +927,17 @@ if (isBoardFull() || (SUDDEN_DEATH && hasWinningLine)) {
 }
 ```
 
-`hasWinningLine` is only a comparison of the score with `WINNING_SCORE`, which is `300` — and a line of
-exactly 3 is worth 300 points, hence any score bigger than or equal to 300 means such a line exists
-somewhere on the board, in any of the four directions.
+`hasWinningLine` is only a comparison of the score with `WINNING_SCORE`, which is `300` — and a line of exactly 3 is worth 300 points, hence any score bigger than or equal to 300 means such a line exists somewhere on the board, in any of the four directions.
 
-This is the real payoff of having built a scoring engine in the part 3 instead of a list of winning
-combinations. The classic win condition of Tic Tac Toe became **one comparison**, and it does not care
-if the board is 3x3 or 20x20.
+This is the real payoff of having built a scoring engine in the part 3 instead of a list of winning combinations. The classic win condition of Tic Tac Toe became **one comparison**, and it does not care if the board is 3x3 or 20x20.
 
-And if you want to be stricter, for example "you win only with a line of 5 on a big board", you only
-change `WINNING_SCORE` to `500`. That is it.
+And if you want to be stricter, for example "you win only with a line of 5 on a big board", you only change `WINNING_SCORE` to `500`. That is it.
 
 ### Two bugs that are hiding in this code
 
-I want to be honest with you about my own code, because finding this kind of thing is much more useful
-for a junior developer than reading a perfect tutorial where everything works by magic. 🙂
+I want to be honest with you about my own code, because finding this kind of thing is much more useful for a junior developer than reading a perfect tutorial where everything works by magic. 🙂
 
-Both of these bugs are in the project **right now** and the game still works. That is exactly what
-makes them dangerous.
+Both of these bugs are in the project **right now** and the game still works. That is exactly what makes them dangerous.
 
 **1. `updateMoves()` does nothing to the cells**
 
@@ -1073,17 +947,11 @@ Look at this method in `./src/store/moveStats.ts`:
 moves.x.selectedCells.concat(playerMove.selectedCells);
 ```
 
-`concat()` does **not** change the array it is called on, it returns a **new** array. And we don't
-assign that returned value to anything, so this line is doing absolutely nothing. The correct version
-would be `moves.x.selectedCells = moves.x.selectedCells.concat(...)` or simply a `push()`.
+`concat()` does **not** change the array it is called on, it returns a **new** array. And we don't assign that returned value to anything, so this line is doing absolutely nothing. The correct version would be `moves.x.selectedCells = moves.x.selectedCells.concat(...)` or simply a `push()`.
 
-So why does the game work?! because the cells are actually recorded somewhere else — in `makeMove()`,
-where `currentPlayerStats.selectedCells.push(cellNumber)` writes directly into the live array that
-lives inside the store. It means the whole game depends on a side effect in a different file, and
-`updateMoves()` is only useful for attaching the player object.
+So why does the game work?! because the cells are actually recorded somewhere else — in `makeMove()`, where `currentPlayerStats.selectedCells.push(cellNumber)` writes directly into the live array that lives inside the store. It means the whole game depends on a side effect in a different file, and `updateMoves()` is only useful for attaching the player object.
 
-Be careful about this one: if you ever "clean up" `makeMove()` to stop mutating the store, your game
-will silently stop counting anything.
+Be careful about this one: if you ever "clean up" `makeMove()` to stop mutating the store, your game will silently stop counting anything.
 
 **2. `updateStats()` skips the first game**
 
@@ -1096,45 +964,33 @@ if (foundStatIndex) {
 }
 ```
 
-`findIndex()` returns `-1` when nothing is found, and `0` when the item is the **first** one in the
-array. But `0` is falsy in Javascript! Therefore, for the very first game of the session the `if`
-never runs and the `splice()` never happens. The correct condition is `if (foundStatIndex > -1)`.
+`findIndex()` returns `-1` when nothing is found, and `0` when the item is the **first** one in the array. But `0` is falsy in Javascript! Therefore, for the very first game of the session the `if` never runs and the `splice()` never happens. The correct condition is `if (foundStatIndex > -1)`.
 
-And again — why does the score still appear on the screen?! because of another accident.
-`addScore()` starts with:
+And again — why does the score still appear on the screen?! because of another accident. `addScore()` starts with:
 
 ```ts
 let lastStat: IStat = { ...this.getLastStats() };
 ```
 
-The spread operator makes a **shallow** copy, so `lastStat.player1` is not a copy, it is the very same
-object that is sitting inside the `stats` array. When we then write `lastStat.player1.score = newValue`,
-we are already changing the stored stat directly, and the `splice()` is not needed at all.
+The spread operator makes a **shallow** copy, so `lastStat.player1` is not a copy, it is the very same object that is sitting inside the `stats` array. When we then write `lastStat.player1.score = newValue`, we are already changing the stored stat directly, and the `splice()` is not needed at all.
 
-Two accidental behaviours that cancel two bugs. This is the kind of thing that makes a project work
-for months and then explode the day somebody refactors one innocent line. 😅
+Two accidental behaviours that cancel two bugs. This is the kind of thing that makes a project work for months and then explode the day somebody refactors one innocent line. 😅
 
 ### Troubleshooting
 
-These are the real problems I hit while making this game. If something does not work on your machine,
-most probably it is one of these:
+These are the real problems I hit while making this game. If something does not work on your machine, most probably it is one of these:
 
 **The page is completely empty and the console says "Failed to load module script" or 404**
 
-Check the extensions in your imports. As we explained in the part 2, they must end with `.js` even
-though your files are `.ts`, because the browser resolves them, not `tsc`.
+Check the extensions in your imports. As we explained in the part 2, they must end with `.js` even though your files are `.ts`, because the browser resolves them, not `tsc`.
 
 **404 on `/build/index.js`**
 
-The `build` folder does not exist yet. It is generated by `tsc`, hence you must run `npm run dev` (or
-`npm run build-dist`) at least once before opening the page. Also make sure you are opening
-`http://localhost:3000` and not the `index.html` file directly from your file system — with `file://`
-the module imports and the live reload will not work.
+The `build` folder does not exist yet. It is generated by `tsc`, hence you must run `npm run dev` (or `npm run build-dist`) at least once before opening the page. Also make sure you are opening `http://localhost:3000` and not the `index.html` file directly from your file system — with `file://` the module imports and the live reload will not work.
 
 **`Cannot find module 'body-parser'`**
 
-Our `server.js` requires it. It usually comes along with `express` as a sub-dependency so it works by
-luck, but you should not rely on that:
+Our `server.js` requires it. It usually comes along with `express` as a sub-dependency so it works by luck, but you should not rely on that:
 
 `npm install body-parser`
 
@@ -1146,57 +1002,40 @@ Look at the scripts again:
 "watch:2": "tsc server.ts",
 ```
 
-There is no `-w` in there, so it compiles **once** when you start `npm run dev` and never again. On
-top of that, when you pass a file name to `tsc` on the command line, `tsc` **ignores your
-`tsconfig.json` completely** and falls back to its own defaults. That is why the generated `server.js`
-looks so different from the rest of our `build` output — it comes out as old-style ES5 with `var` and
-`function`. So if you edit `server.ts`, restart `npm run dev`.
+There is no `-w` in there, so it compiles **once** when you start `npm run dev` and never again. On top of that, when you pass a file name to `tsc` on the command line, `tsc` **ignores your `tsconfig.json` completely** and falls back to its own defaults. That is why the generated `server.js`
+looks so different from the rest of our `build` output — it comes out as old-style ES5 with `var` and `function`. So if you edit `server.ts`, restart `npm run dev`.
 
 **I changed a `*.ts` file in `src` and the browser shows the old code**
 
-`tsc -w` regenerates the `build` files and `nodemon` restarts the server, but sometimes the browser
-holds the old ES module in its cache. Do a hard refresh (`Ctrl` + `Shift` + `R`), and if you are
-debugging a lot, open the devtools and check "Disable cache" in the Network tab.
+`tsc -w` regenerates the `build` files and `nodemon` restarts the server, but sometimes the browser holds the old ES module in its cache. Do a hard refresh (`Ctrl` + `Shift` + `R`), and if you are debugging a lot, open the devtools and check "Disable cache" in the Network tab.
 
 **`New instance cannot be created!`**
 
-Our stores throw this on purpose when a second instance is built. In practice it means the same module
-got loaded twice by the browser, and the usual reason is that two files imported it with two different
-paths (for example `'../store/moveStats.js'` in one file and `'./store/moveStats.js'` from a wrong
-folder level in another). To the browser those are two different URLs, hence two different modules.
-Keep your import paths consistent.
+Our stores throw this on purpose when a second instance is built. In practice it means the same module got loaded twice by the browser, and the usual reason is that two files imported it with two different paths (for example `'../store/moveStats.js'` in one file and `'./store/moveStats.js'` from a wrong folder level in another). To the browser those are two different URLs, hence two different modules. Keep your import paths consistent.
 
 **`Cannot read properties of undefined (reading 'selectedCells')`**
 
-The guard from the part 3 is missing. Make sure `if (!moves?.x) return;` sits **above** the
-`Scoring()` call in `handleClick()`.
+The guard from the part 3 is missing. Make sure `if (!moves?.x) return;` sits **above** the `Scoring()` call in `handleClick()`.
 
 **An error about reading `player1` or `symbol` of `undefined`**
 
-`GameStats.getLastStats()` returned nothing, which means no stat was ever pushed into the store. Check
-that you kept the `preInit();` call just before the `return` statement of the `Playground()` module —
-it is easy to lose it while copying the methods around.
+`GameStats.getLastStats()` returned nothing, which means no stat was ever pushed into the store. Check that you kept the `preInit();` call just before the `return` statement of the `Playground()` module — it is easy to lose it while copying the methods around.
 
 **The scores grow insanely after a few clicks**
 
-You changed `addScore()` to add instead of to set. As we explained in the part 3, a new `Scoring()`
-module recalculates the complete score from zero on every click, so it must **replace** the old value.
+You changed `addScore()` to add instead of to set. As we explained in the part 3, a new `Scoring()` module recalculates the complete score from zero on every click, so it must **replace** the old value.
 
 **The modal appears without any animation, it just pops in**
 
-The `is-open` class is being added in the same tick as the `appendChild()`. It must go inside a
-`requestAnimationFrame()`, otherwise the browser never paints the starting state of the transition.
+The `is-open` class is being added in the same tick as the `appendChild()`. It must go inside a `requestAnimationFrame()`, otherwise the browser never paints the starting state of the transition.
 
 **The firework is blurry, or it draws in the wrong place**
 
-Two candidates. Either the `setTransform()` is missing after you assigned `canvas.width`, or you
-started the firework before the overlay was appended to the DOM — an element that is not on the page
-has a `clientWidth` of `0`, hence the canvas gets a size of zero.
+Two candidates. Either the `setTransform()` is missing after you assigned `canvas.width`, or you started the firework before the overlay was appended to the DOM — an element that is not on the page has a `clientWidth` of `0`, hence the canvas gets a size of zero.
 
 **The modal is closed but the fan of my laptop keeps spinning**
 
-The `requestAnimationFrame` loop is still running. Make sure `hide()` really calls `firework.stop()`,
-and that `stop()` calls `window.cancelAnimationFrame()`. A loop that only stops drawing but keeps
+The `requestAnimationFrame` loop is still running. Make sure `hide()` really calls `firework.stop()`, and that `stop()` calls `window.cancelAnimationFrame()`. A loop that only stops drawing but keeps
 scheduling itself costs you exactly the same CPU as a visible one.
 
 **Clicking outside the modal does not close it**
@@ -1207,26 +1046,15 @@ The canvas is eating your clicks. Check that `.firework-canvas` has `pointer-eve
 
 So, what did we build across these four parts?
 
-We started with a 3x3 board and 8 hardcoded winning combinations in a single `index.js`, and we ended
-with a `Typescript` project that has a `Module`-pattern playground, two `Singleton` stores, a scoring
-engine based on matrix rotations that works on any dimension, a live score board, a winner detection
-with a switchable rule, a board size selector, and a firework made of nothing but a `<canvas>` and some
-trigonometry.
+We started with a 3x3 board and 8 hardcoded winning combinations in a single `index.js`, and we ended with a `Typescript` project that has a `Module`-pattern playground, two `Singleton` stores, a scoring engine based on matrix rotations that works on any dimension, a live score board, a winner detection with a switchable rule, a board size selector, and a firework made of nothing but a `<canvas>` and some trigonometry.
 
-And more importantly, at least I hope so, you saw the reasoning behind each step and not only the
-final code — why the hardcoded combinations had to go, why the matrix had to be rotated instead of
-writing four different counting methods, why a particle gets drawn as a line and not as a dot, and why
-two bugs can hide in a working game for months.
+And more importantly, at least I hope so, you saw the reasoning behind each step and not only the final code — why the hardcoded combinations had to go, why the matrix had to be rotated instead of writing four different counting methods, why a particle gets drawn as a line and not as a dot, and why two bugs can hide in a working game for months.
 
-The whole source code is on my [Github](https://github.com/panahi-projects/tic-toc-toe), feel free to
-clone it, break it and improve it.
+The whole source code is on my [Github](https://github.com/panahi projects/tic-toc-toe), feel free to clone it, break it and improve it.
 
-What is still on my own list for this project: the `1-player` mode against the computer (the
-`TType` type in our interfaces already says `'Mankind' | 'AI'`, so the door is open 😉), a responsive
-board for the mobile screens, and saving the game history that we are already collecting in
+What is still on my own list for this project: the `1-player` mode against the computer (the `TType` type in our interfaces already says `'Mankind' | 'AI'`, so the door is open 😉), a responsive board for the mobile screens, and saving the game history that we are already collecting in
 `GameStats` but never showing to anybody.
 
-If you build something on top of this, or if you find a third bug that I didn't notice, please tell me
-in the comments — I would really enjoy reading it.
+If you build something on top of this, or if you find a third bug that I didn't notice, please tell me in the comments — I would really enjoy reading it.
 
 Thanks for reading all the four parts, and have fun! 🚀
