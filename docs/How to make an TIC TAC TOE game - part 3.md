@@ -6,10 +6,7 @@ In the previous part we migrated the whole project to `Typescript`, we rebuilt t
 
 Only one thing was missing, and it was the most important one: both scores were stuck on `0`.
 
-Click [here](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript) to
-see the article PART-1, and the PART-2 is [here](ADD-PART-2-URL-HERE).
-
-<!-- TODO(Saeed): replace ADD-PART-2-URL-HERE with the real dev.to link of part 2 -->
+Click [here](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript) to see the article PART-1, and the PART-2 is [here](ADD-PART-2-URL-HERE).
 
 In this part we are going to build the brain of the game. Frankly, this was the part that took me the most time in the whole project, and also it was the most enjoyable one. 🤓
 

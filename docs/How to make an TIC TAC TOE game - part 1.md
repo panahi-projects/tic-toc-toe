@@ -10,7 +10,7 @@ So, if you're ready to dive into the world of JavaScript gaming, I invite you to
 **Let's get started!** 🚀
 
 Not long ago, on a holiday evening, I decided to quickly implement a Tic Tac Toe game with pure JS for my own fun. After spending a couple of hours finally I made a 3x3 game with an appropriate UI and functionality.
-[Click here](https://github.com/panahi-projects/tic-toc-toe/tree/149de7d9402d002b305b00adb2ae6e40ca9974e2) to see the source code on my [Github](https://github.com/panahi-projects).
+[Click here](https://github.com/panahi-projects/tic-toc-toe) to see the source code on my [Github](https://github.com/panahi-projects).
 
 But when I looked at the code I had written from a distance I realized why should it be limited only to 3x3 and why not 6x6 or more?! To reach that milestone, a series of fundamental changes had to be made in the program. And very casually, this project became a relatively serious project.
 
@@ -323,11 +323,9 @@ Install the following packages:
 - `npm install --save-dev nodemon livereload connect-livereload`
 
 A small note about `body-parser`: it comes along with `express` as a sub-dependency, hence
-`require('body-parser')` would work even if you don't install it. But it is not written in your
-`package.json` in that case, so the day `express` changes its dependencies your app breaks for no
-visible reason. Therefore, always install what you `require` directly.
+`require('body-parser')` would work even if you don't install it. But it is not written in your `package.json` in that case, so the day `express` changes its dependencies your app breaks for no visible reason. Therefore, always install what you `require` directly.
 
-When we installed the above packages, make a JS file in the root called `server.js`
+When we installed the above packages, make a JS file in the root called `server.js`. 
 And add the following codes inside that to make a server (because this article is not about “How to create a JS web server”, we only add the following codes to our project and not going to instruct that):
 
 ```js
@@ -808,5 +806,7 @@ The game starts with X going first. When a player makes a move, the makeMove() f
 Stay tuned for the next part of our Tic Tac Toe series, where we'll take the game to the next level by optimizing and enhancing its functionality. We'll be incorporating popular JavaScript design patterns such as `Singleton` and `Module` patterns to make the code more efficient and maintainable.
 
 Plus, we'll expand the game to support larger boards, allowing players to experience the thrill of competition on 6x6, 8x8, or even larger grids.
+
+[See the part 2 here](https://dev.to/saeedpanahi/how-to-make-an-advanced-tic-tac-toe-game-with-javascript-part-2-2gda)
 
 And, we'll automate the process of checking for winning combinations, so you can focus on strategizing and outsmarting your opponent without worrying about keeping track of every possible combination. Lastly, we'll display the players' scores on a dynamic scoreboard, adding an extra layer of excitement to the game. Don't miss out on the next installment of our Tic Tac Toe adventure! ;)
